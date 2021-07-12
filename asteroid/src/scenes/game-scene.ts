@@ -34,6 +34,15 @@ export class GameScene extends Phaser.Scene {
       )
     );
     this.gotHit = false;
+    this.bitmapTexts.push(
+      this.add.bitmapText(
+        0,
+        40,
+        'asteroidFont',
+        `LIVES: ${CONST.LIVES}`,
+        60
+      )
+    );
   }
 
   update(): void {

@@ -1,17 +1,20 @@
 import { Bullet } from './bullet';
 import { CONST } from '../const/const';
 import { IGraphicsConstructor } from '../interfaces/graphics.interface';
+import { SquareBullet } from './squarebullet';
 
 export class Ship extends Phaser.GameObjects.Graphics {
   body: Phaser.Physics.Arcade.Body;
 
   private velocity: Phaser.Math.Vector2;
   private cursors: any;
-  private bullets: Bullet[];
+  private bullets: (Bullet | SquareBullet)[];
   private shootKey: Phaser.Input.Keyboard.Key;
   private isShooting: boolean;
 
-  public getBullets(): Bullet[] {
+  private noOfShoot: number;
+
+  public getBullets(): (Bullet | SquareBullet)[] {
     return this.bullets;
   }
 
@@ -25,6 +28,7 @@ export class Ship extends Phaser.GameObjects.Graphics {
     // variables
     this.bullets = [];
     this.isShooting = false;
+    this.noOfShoot = 0;
 
     // init ship
     this.initShip();
@@ -132,16 +136,31 @@ export class Ship extends Phaser.GameObjects.Graphics {
   }
 
   private shoot(): void {
-    this.bullets.push(
-      new Bullet({
-        scene: this.scene,
-        rotation: this.rotation,
-        options: {
-          x: this.x,
-          y: this.y
-        }
-      })
-    );
+    if (this.noOfShoot < 3) {
+      this.noOfShoot++;
+      this.bullets.push(
+        new Bullet({
+          scene: this.scene,
+          rotation: this.rotation,
+          options: {
+            x: this.x,
+            y: this.y
+          }
+        })
+      );
+    } else {
+      this.noOfShoot = 0;
+      this.bullets.push(
+        new SquareBullet({
+          scene: this.scene,
+          rotation: this.rotation,
+          options: {
+            x: this.x,
+            y: this.y
+          }
+        })
+      );
+    }
   }
 
   private recoil(): void {
