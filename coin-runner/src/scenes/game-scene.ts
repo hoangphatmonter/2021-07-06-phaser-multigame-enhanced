@@ -1,3 +1,4 @@
+import { Apple } from '../objects/apple';
 import { Coin } from '../objects/coin';
 import { Player } from '../objects/player';
 
@@ -7,6 +8,8 @@ export class GameScene extends Phaser.Scene {
   private coinsCollectedText: Phaser.GameObjects.Text;
   private collectedCoins: number;
   private player: Player;
+  private apples: Apple[];
+  private spawnAppleTimer: Phaser.Time.TimerEvent;
 
   constructor() {
     super({
@@ -18,10 +21,19 @@ export class GameScene extends Phaser.Scene {
     this.load.image('background', './assets/images/background.png');
     this.load.image('player', './assets/images/player.png');
     this.load.image('coin', './assets/images/coin.png');
+    this.load.image('apple', './assets/images/apple.png');
   }
 
   init(): void {
     this.collectedCoins = 0;
+    this.apples = [];
+
+    this.spawnAppleTimer = this.time.addEvent({
+      delay: 4000,
+      callback: this.spawnNewApple,
+      callbackScope: this,
+      loop: true
+    });
   }
 
   create(): void {
@@ -62,6 +74,9 @@ export class GameScene extends Phaser.Scene {
     // update objects
     this.player.update();
     this.coin.update();
+    this.apples.forEach(apple => {
+      apple.update();
+    })
 
     // do the collision check
     if (
@@ -72,11 +87,38 @@ export class GameScene extends Phaser.Scene {
     ) {
       this.updateCoinStatus();
     }
+
+    // do the collision check with apple
+    for (let i = 0; i < this.apples.length; i++) {
+      if (
+        Phaser.Geom.Intersects.RectangleToRectangle(
+          this.player.getBounds(),
+          this.apples[i].getBounds()
+        )
+      ) {
+        this.buyApple();
+        this.apples[i].destroy();
+        this.apples.splice(i, 1);
+        i--;
+      }
+    }
   }
 
   private updateCoinStatus(): void {
     this.collectedCoins++;
     this.coinsCollectedText.setText(this.collectedCoins + '');
     this.coin.changePosition();
+  }
+  private buyApple(): void {
+    this.collectedCoins--;
+    this.coinsCollectedText.setText(this.collectedCoins + '');
+  }
+  private spawnNewApple(): void {
+    this.apples.push(new Apple({
+      scene: this,
+      x: Phaser.Math.RND.integerInRange(100, 700),
+      y: Phaser.Math.RND.integerInRange(100, 500),
+      texture: 'apple'
+    }));
   }
 }
