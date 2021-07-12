@@ -11,8 +11,11 @@ export class GameScene extends Phaser.Scene {
   private playerHasClicked: boolean;
   private alphaDifferenceText: Phaser.GameObjects.Text;
   private feedbackText: Phaser.GameObjects.Text;
+  private wonderfulText: Phaser.GameObjects.Text;
+  private wonderfulCount: number;
 
   private nextElement: ObjTypes;
+  private isCountUpdate: boolean;
 
   constructor() {
     super({
@@ -20,6 +23,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.nextElement = ObjTypes.CRYSTAL;
+    this.wonderfulCount = 0;
   }
 
   preload(): void {
@@ -29,8 +33,21 @@ export class GameScene extends Phaser.Scene {
 
   init(): void {
     this.playerHasClicked = false;
+    this.isCountUpdate = false;
     this.alphaDifferenceText = null;
     this.feedbackText = null;
+    this.wonderfulText = this.add.text(
+      0,
+      0,
+      `Wonderful Streak: ${this.wonderfulCount}`,
+      {
+        fontFamily: 'Arial',
+        fontSize: 50 + 'px',
+        stroke: '#000000',
+        strokeThickness: 8,
+        color: '#ffffff'
+      }
+    ).setOrigin(0, 0);
   }
 
   create(): void {
@@ -121,41 +138,57 @@ export class GameScene extends Phaser.Scene {
       color: '#ffffff'
     };
 
-    if (difference >= 0.5) {
-      this.feedbackText = this.add.text(
-        this.sys.canvas.width / 2 - 250,
-        this.sys.canvas.height / 2 - 150,
-        'You can do better!',
-        textConfig
-      );
-    } else if (difference < 0.5 && difference >= 0.3) {
-      this.feedbackText = this.add.text(
-        this.sys.canvas.width / 2 - 40,
-        this.sys.canvas.height / 2 - 150,
-        'OK!',
-        textConfig
-      );
-    } else if (difference < 0.3 && difference >= 0.1) {
-      this.feedbackText = this.add.text(
-        this.sys.canvas.width / 2 - 90,
-        this.sys.canvas.height / 2 - 150,
-        'Great!',
-        textConfig
-      );
-    } else if (difference < 0.1 && difference > 0.005) {
-      this.feedbackText = this.add.text(
-        this.sys.canvas.width / 2 - 145,
-        this.sys.canvas.height / 2 - 150,
-        'Wonderful!',
-        textConfig
-      );
-    } else if (difference <= 0.005) {
-      this.feedbackText = this.add.text(
-        this.sys.canvas.width / 2 - 145,
-        this.sys.canvas.height / 2 - 150,
-        'Unbelievable!',
-        textConfig
-      );
+    if (difference >= 0.1) {
+      this.updateWonderfulCount(true);
+      if (difference >= 0.5) {
+        this.feedbackText = this.add.text(
+          this.sys.canvas.width / 2 - 250,
+          this.sys.canvas.height / 2 - 150,
+          'You can do better!',
+          textConfig
+        );
+      } else if (difference < 0.5 && difference >= 0.3) {
+        this.feedbackText = this.add.text(
+          this.sys.canvas.width / 2 - 40,
+          this.sys.canvas.height / 2 - 150,
+          'OK!',
+          textConfig
+        );
+      } else if (difference < 0.3 && difference >= 0.1) {
+        this.feedbackText = this.add.text(
+          this.sys.canvas.width / 2 - 90,
+          this.sys.canvas.height / 2 - 150,
+          'Great!',
+          textConfig
+        );
+      }
+    } else {
+      this.updateWonderfulCount(false);
+      if (difference < 0.1 && difference > 0.005) {
+        this.feedbackText = this.add.text(
+          this.sys.canvas.width / 2 - 145,
+          this.sys.canvas.height / 2 - 150,
+          'Wonderful!',
+          textConfig
+        );
+      } else if (difference <= 0.005) {
+        this.feedbackText = this.add.text(
+          this.sys.canvas.width / 2 - 145,
+          this.sys.canvas.height / 2 - 150,
+          'Unbelievable!',
+          textConfig
+        );
+      }
+    }
+  }
+
+  updateWonderfulCount(reset: boolean) {
+    if (!this.isCountUpdate) {
+      if (reset)
+        this.wonderfulCount = 0;
+      else
+        this.wonderfulCount += 1;
+      this.isCountUpdate = true;
     }
   }
 }
