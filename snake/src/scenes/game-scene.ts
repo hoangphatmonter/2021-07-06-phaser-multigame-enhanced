@@ -1,6 +1,7 @@
 import { Apple } from '../objects/apple';
 import { Snake } from '../objects/snake';
 import { CONST } from '../const/const';
+import { Wall } from '../objects/wall';
 
 export class GameScene extends Phaser.Scene {
   // field and game setting
@@ -17,6 +18,7 @@ export class GameScene extends Phaser.Scene {
   private player: Snake;
   private apple: Apple;
   private gameBorder: Phaser.GameObjects.Graphics[];
+  private listWall: Wall[];
 
   // texts
   private scoreText: Phaser.GameObjects.BitmapText;
@@ -83,6 +85,9 @@ export class GameScene extends Phaser.Scene {
       '' + CONST.SCORE,
       8
     );
+
+    // dark apple
+    this.listWall = [];
   }
 
   update(time: number): void {
@@ -109,12 +114,39 @@ export class GameScene extends Phaser.Scene {
       this.player.growSnake();
       CONST.SCORE++;
       this.scoreText.setText('' + CONST.SCORE);
-      this.apple.newApplePosition(this.rndXPos(), this.rndYPos());
+      // add more wall
+      this.listWall.push(new Wall({
+        scene: this,
+        options: {
+          x: this.rndXPos(),
+          y: this.rndYPos()
+        }
+      }))
+      // prevent spawn apple on walls
+      let x = this.rndXPos();
+      let y = this.rndYPos();
+      for (let i = 0; i < this.listWall.length; i++) {
+        if (x === this.listWall[i].getXPosition() &&
+          y === this.listWall[i].getYPosition()
+        ) {
+          x = this.rndXPos();
+          y = this.rndYPos();
+          i = -1;
+        }
+      }
+      this.apple.newApplePosition(x, y);
     }
 
     // border vs. snake collision
     for (const { x, y } of this.gameBorder) {
       if (headX === x && headY === y) {
+        this.player.setDead(true);
+      }
+    }
+
+    // snake vs wall collision
+    for (let i = 0; i < this.listWall.length; i++) {
+      if (headX === this.listWall[i].x && headY === this.listWall[i].y) {
         this.player.setDead(true);
       }
     }
