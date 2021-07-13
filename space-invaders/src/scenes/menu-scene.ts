@@ -36,6 +36,15 @@ export class MenuScene extends Phaser.Scene {
         8
       )
     );
+    this.bitmapTexts.push(
+      this.add.bitmapText(
+        this.sys.canvas.width / 2,
+        this.sys.canvas.height / 2 + 40,
+        'font',
+        'PRESS V TO TURN ON SHIELD IN GAME\n\nPRESS SPACE TO SHOOT',
+        6
+      ).setOrigin(0.5)
+    );
   }
 
   update(): void {
@@ -54,5 +63,8 @@ export class MenuScene extends Phaser.Scene {
     this.registry.set('points', 0);
     this.registry.set('lives', 3);
     this.registry.set('level', 1);
+    this.registry.set('shieldCooldown', 10000);
+    this.registry.set('curShieldCooldown', 0);
+    this.registry.set('shieldLast', 3000);
   }
 }

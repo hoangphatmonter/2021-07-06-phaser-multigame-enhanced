@@ -47,7 +47,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         this.dyingTime = 100;
         this.enemyTint = 0xffffff;
         this.lives = 1;
-        this.reloadTime = 9000;
+        this.reloadTime = 7000;
         this.valueKill = 20;
         break;
 
@@ -55,7 +55,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         this.dyingTime = 120;
         this.enemyTint = 0x42a4aa;
         this.lives = 2;
-        this.reloadTime = 10000;
+        this.reloadTime = 8000;
         this.valueKill = 40;
         break;
 
@@ -63,7 +63,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         this.dyingTime = 140;
         this.enemyTint = 0x4a4e4d;
         this.lives = 2;
-        this.reloadTime = 12000;
+        this.reloadTime = 10000;
         this.valueKill = 60;
 
         break;

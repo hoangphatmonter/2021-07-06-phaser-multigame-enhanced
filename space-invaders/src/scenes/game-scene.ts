@@ -51,9 +51,9 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  update(): void {
+  update(time: number, delta: number): void {
     if (this.player.active) {
-      this.player.update();
+      this.player.update(time, delta);
 
       this.enemies.children.each((enemy: Enemy) => {
         enemy.update();
@@ -93,7 +93,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   private bulletHitPlayer(bullet: Bullet, player: Player): void {
+    if (!player.isShieldTurnOn())
+      player.gotHurt();
     bullet.destroy();
-    player.gotHurt();
   }
 }
