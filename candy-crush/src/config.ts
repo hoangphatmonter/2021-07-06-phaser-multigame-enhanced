@@ -1,5 +1,6 @@
 import { BootScene } from './scenes/boot-scene';
 import { GameScene } from './scenes/game-scene';
+import { HUDScene } from './scenes/hub-scene';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Candy crush',
@@ -9,7 +10,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
   height: 700,
   type: Phaser.AUTO,
   parent: 'game',
-  scene: [BootScene, GameScene],
+  scene: [BootScene, GameScene, HUDScene],
   backgroundColor: '#de3412',
   render: { pixelArt: false, antialias: true }
 };

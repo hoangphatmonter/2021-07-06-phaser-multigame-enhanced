@@ -161,6 +161,12 @@ export class GameScene extends Phaser.Scene {
 
     //If there are matches, remove them
     if (matches.length > 0) {
+      // add points
+      let totalPoints = 0;
+      matches.forEach(match => {
+        totalPoints += match.length;
+      });
+      this.events.emit('pointsChanged', totalPoints);
       //Remove the tiles
       this.removeTileGroup(matches);
       // Move the tiles currently on the board into their new positions
