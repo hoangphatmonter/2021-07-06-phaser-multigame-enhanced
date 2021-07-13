@@ -1,5 +1,6 @@
 import { Bullet } from './bullet';
 import { ISpriteConstructor } from '../interfaces/sprite.interface';
+import { Bomb } from './bomb';
 
 export class Enemy extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body;
@@ -96,17 +97,30 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       this.anims.play(this.enemyType + 'Fly', true);
 
       if (Phaser.Math.RND.between(0, this.reloadTime) === 0) {
-        this.bullets.add(
-          new Bullet({
-            scene: this.scene,
-            bulletProperties: {
-              speed: 100
-            },
-            x: this.x,
-            y: this.y,
-            texture: 'bullet'
-          })
-        );
+        if (Math.random() < 0.5)
+          this.bullets.add(
+            new Bullet({
+              scene: this.scene,
+              bulletProperties: {
+                speed: 100
+              },
+              x: this.x,
+              y: this.y,
+              texture: 'bullet'
+            })
+          );
+        else
+          this.bullets.add(
+            new Bomb({
+              scene: this.scene,
+              bulletProperties: {
+                speed: 100
+              },
+              x: this.x,
+              y: this.y,
+              texture: 'bomb'
+            })
+          );
       }
 
       if (this.isHurt) {
