@@ -41,6 +41,8 @@ export class BootScene extends Phaser.Scene {
 
     // load our package
     this.load.pack('preload', './assets/pack.json', 'preload');
+    this.load.image('heart', './assets/sprites/heart.png');
+    this.load.image('speedboost', '/assets/sprites/speedboost.png');
   }
 
   update(): void {

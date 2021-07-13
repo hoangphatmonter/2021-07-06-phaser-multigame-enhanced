@@ -2,6 +2,8 @@ import { Player } from '../objects/player';
 import { Enemy } from '../objects/enemy';
 import { Obstacle } from '../objects/obstacles/obstacle';
 import { Bullet } from '../objects/bullet';
+import { Heart } from '../objects/obstacles/heart';
+import { SpeedBoost } from '../objects/obstacles/speedboost';
 
 export class GameScene extends Phaser.Scene {
   private map: Phaser.Tilemaps.Tilemap;
@@ -12,6 +14,8 @@ export class GameScene extends Phaser.Scene {
   private enemies: Phaser.GameObjects.Group;
   private obstacles: Phaser.GameObjects.Group;
 
+  private items: Phaser.GameObjects.Group;
+
   private target: Phaser.Math.Vector2;
 
   constructor() {
@@ -20,7 +24,7 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  init(): void {}
+  init(): void { }
 
   create(): void {
     // create tilemap from tiled JSON
@@ -38,6 +42,7 @@ export class GameScene extends Phaser.Scene {
     this.enemies = this.add.group({
       /*classType: Enemy*/
     });
+    this.items = this.add.group({});
     this.convertObjects();
 
     // collider layer and obstacles
@@ -89,6 +94,15 @@ export class GameScene extends Phaser.Scene {
         null
       );
     }, this);
+
+    // collider with item
+    this.physics.add.collider(
+      this.player,
+      this.items,
+      this.playerHitItem,
+      null,
+      this
+    );
 
     this.cameras.main.startFollow(this.player);
   }
@@ -162,5 +176,31 @@ export class GameScene extends Phaser.Scene {
   private playerBulletHitEnemy(bullet: Bullet, enemy: Enemy): void {
     bullet.destroy();
     enemy.updateHealth();
+    if (!enemy.active) {
+      let item;
+      if (Math.random() > 0.4)
+        item = new Heart({
+          scene: this,
+          x: enemy.x,
+          y: enemy.y,
+          texture: 'heart'
+        });
+      else
+        item = new SpeedBoost({
+          scene: this,
+          x: enemy.x,
+          y: enemy.y,
+          texture: 'speedboost'
+        });
+
+      this.items.add(item);
+    }
+  }
+  private playerHitItem(player: Player, item: Heart | SpeedBoost) {
+    item.destroy();
+    if (item instanceof Heart)
+      player.boostHealth();
+    else if (item instanceof SpeedBoost)
+      player.boostSpeed();
   }
 }

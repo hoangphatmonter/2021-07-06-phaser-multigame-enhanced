@@ -8,6 +8,7 @@ export class Player extends Phaser.GameObjects.Image {
   private health: number;
   private lastShoot: number;
   private speed: number;
+  private rotationSpeed: number;
 
   // children
   private barrel: Phaser.GameObjects.Image;
@@ -38,6 +39,7 @@ export class Player extends Phaser.GameObjects.Image {
     this.health = 1;
     this.lastShoot = 0;
     this.speed = 100;
+    this.rotationSpeed = 0.02;
 
     // image
     this.setOrigin(0.5, 0.5);
@@ -112,9 +114,9 @@ export class Player extends Phaser.GameObjects.Image {
 
     // rotate tank
     if (this.cursors.left.isDown) {
-      this.rotation -= 0.02;
+      this.rotation -= this.rotationSpeed;
     } else if (this.cursors.right.isDown) {
-      this.rotation += 0.02;
+      this.rotation += this.rotationSpeed;
     }
 
     // rotate barrel
@@ -181,5 +183,13 @@ export class Player extends Phaser.GameObjects.Image {
       this.active = false;
       this.scene.scene.start('MenuScene');
     }
+  }
+  public boostHealth() {
+    this.health = 1;
+    this.redrawLifebar();
+  }
+  public boostSpeed() {
+    this.speed += 100;
+    this.rotationSpeed += 0.02;
   }
 }
