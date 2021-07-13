@@ -28,7 +28,7 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  init(): void {}
+  init(): void { }
 
   create(): void {
     // *****************************************************************
@@ -36,9 +36,9 @@ export class GameScene extends Phaser.Scene {
     // *****************************************************************
 
     // create our tilemap from Tiled JSON
-    this.map = this.make.tilemap({ key: this.registry.get('level') });
+    this.map = this.make.tilemap({ key: this.registry.get('level') });  // json that store position of all objects
     // add our tileset and layers to our tilemap
-    this.tileset = this.map.addTilesetImage('tiles');
+    this.tileset = this.map.addTilesetImage('tiles'); // image of all objects
     this.backgroundLayer = this.map.createLayer(
       'backgroundLayer',
       this.tileset,
@@ -144,7 +144,7 @@ export class GameScene extends Phaser.Scene {
     // CAMERA
     // *****************************************************************
     this.cameras.main.startFollow(this.player);
-    this.cameras.main.setBounds(
+    this.cameras.main.setBounds(  // tam hoat dong cua camera
       0,
       0,
       this.map.widthInPixels,
