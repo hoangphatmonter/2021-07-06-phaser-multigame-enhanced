@@ -2,6 +2,7 @@ import { Player } from '../objects/player';
 import { PlayerTwo } from '../objects/playerTwo';
 import { Wall } from '../objects/wall';
 import { CONST } from '../const/const';
+import { Box } from '../objects/box';
 
 export class GameScene extends Phaser.Scene {
   // field and game setting
@@ -12,11 +13,13 @@ export class GameScene extends Phaser.Scene {
   private horizontalFields: number;
   private verticalFields: number;
   private tick: number;
+  private boxTick: number;
 
   // objects
   private player: Player;
   private playerTwo: PlayerTwo;
   private gameBorder: Phaser.GameObjects.Image[];
+  private boxes: Box[];
 
   // texts
   private scoreText: Phaser.GameObjects.BitmapText;
@@ -35,6 +38,7 @@ export class GameScene extends Phaser.Scene {
     this.horizontalFields = this.boardWidth / CONST.FIELD_SIZE;
     this.verticalFields = this.boardHeight / CONST.FIELD_SIZE;
     this.tick = 0;
+    this.boxTick = 0;
   }
 
   preload(): void {
@@ -72,6 +76,8 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
+    this.boxes = [];
+
     // texts
     this.scoreText = this.add.bitmapText(
       this.gameWidth / 2 - 20,
@@ -86,6 +92,9 @@ export class GameScene extends Phaser.Scene {
     for (let wall of this.gameBorder) {
       wall.update();
     }
+    for (let box of this.boxes) {
+      box.update();
+    }
     if (this.tick === 0) {
       this.tick = time;
     }
@@ -98,6 +107,20 @@ export class GameScene extends Phaser.Scene {
         this.playerTwo.grow();
         this.checkCollision();
         this.tick = time;
+      }
+      if (time - this.boxTick > 1000) {
+        // more boxes
+        this.boxes.push(
+          new Box(
+            {
+              scene: this,
+              x: CONST.FIELD_SIZE / 2 + Math.floor(Math.random() * (this.gameWidth / CONST.FIELD_SIZE - 2) + 1) * CONST.FIELD_SIZE,
+              y: CONST.FIELD_SIZE / 2 + Math.floor(Math.random() * (this.gameHeight / CONST.FIELD_SIZE - 2) + 1) * CONST.FIELD_SIZE,
+              texture: 'border'
+            }
+          )
+        )
+        this.boxTick = time;
       }
       this.player.handleInput();
       this.playerTwo.handleInput();
@@ -152,6 +175,23 @@ export class GameScene extends Phaser.Scene {
         this.playerTwo.getBody().length > 1 &&
         this.playerTwo.getHead().x === bodiesMerged[i].x &&
         this.playerTwo.getHead().y === bodiesMerged[i].y
+      ) {
+        this.playerTwo.setDead(true);
+      }
+    }
+    // check snake <-> boxes
+    for (let i = 0; i < this.boxes.length; i++) {
+      if (
+        this.boxes[i].isCompletelyShowed() &&
+        this.player.getHead().x === this.boxes[i].x &&
+        this.player.getHead().y === this.boxes[i].y
+      ) {
+        this.player.setDead(true);
+      }
+      if (
+        this.boxes[i].isCompletelyShowed() &&
+        this.playerTwo.getHead().x === this.boxes[i].x &&
+        this.playerTwo.getHead().y === this.boxes[i].y
       ) {
         this.playerTwo.setDead(true);
       }
