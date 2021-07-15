@@ -270,6 +270,16 @@ export class GameScene extends Phaser.Scene {
         );
       }
     });
+    // add some modify star
+    this.collectibles.add(
+      new Collectible({
+        scene: this,
+        x: 100,
+        y: 100,
+        texture: 'star',
+        points: 1000
+      })
+    );
   }
 
   /**
