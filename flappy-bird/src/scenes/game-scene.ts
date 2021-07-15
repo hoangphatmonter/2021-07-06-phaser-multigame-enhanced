@@ -1,9 +1,11 @@
 import { Bird } from '../objects/bird';
+import { Coin } from '../objects/coin';
 import { Pipe } from '../objects/pipe';
 
 export class GameScene extends Phaser.Scene {
   private bird: Bird;
   private pipes: Phaser.GameObjects.Group;
+  private coins: Phaser.GameObjects.Group;
   private background: Phaser.GameObjects.TileSprite;
   private scoreText: Phaser.GameObjects.BitmapText;
   private timer: Phaser.Time.TimerEvent;
@@ -33,6 +35,7 @@ export class GameScene extends Phaser.Scene {
       .setDepth(2);
 
     this.pipes = this.add.group({});
+    this.coins = this.add.group({});
 
     this.bird = new Bird({
       scene: this,
@@ -64,11 +67,29 @@ export class GameScene extends Phaser.Scene {
         null,
         this
       );
+      this.physics.overlap(
+        this.bird,
+        this.coins,
+        (bird: Bird, coin: Coin) => {
+          console.log('alo')
+          this.registry.values.score += 10;
+          coin.destroy();
+        },
+        null,
+        this
+      );
     } else {
       Phaser.Actions.Call(
         this.pipes.getChildren(),
         function (pipe: Pipe) {
           pipe.body.setVelocityX(0);
+        },
+        this
+      );
+      Phaser.Actions.Call(
+        this.coins.getChildren(),
+        function (coin: Coin) {
+          coin.body.setVelocityX(0);
         },
         this
       );
@@ -99,6 +120,14 @@ export class GameScene extends Phaser.Scene {
         }
       }
     }
+    // add coin
+    let rnd = Math.random();
+    if (rnd < 0.2) {
+      if (rnd < 0.11)
+        this.addCoin(550, (hole + 4) * 60, 0);
+      else
+        this.addCoin(550, (hole - 2) * 60, 0);
+    }
   }
 
   private addPipe(x: number, y: number, frame: number): void {
@@ -110,6 +139,17 @@ export class GameScene extends Phaser.Scene {
         y: y,
         frame: frame,
         texture: 'pipe'
+      })
+    );
+  }
+  private addCoin(x: number, y: number, frame: number): void {
+    this.coins.add(
+      new Coin({
+        scene: this,
+        x: x,
+        y: y,
+        frame: frame,
+        texture: 'coin'
       })
     );
   }
