@@ -46,7 +46,9 @@ export class BootScene extends Phaser.Scene {
   }
 
   update(): void {
+    this.scene.start('HUBScene');
     this.scene.start('GameScene');
+    this.scene.bringToTop('HUBScene');
   }
 
   private createLoadingGraphics(): void {

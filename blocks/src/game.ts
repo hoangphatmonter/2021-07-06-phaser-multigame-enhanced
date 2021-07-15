@@ -3,6 +3,7 @@
 import 'phaser';
 import { BootScene } from './scenes/boot-scene';
 import { GameScene } from './scenes/game-scene';
+import { HUDScene } from './scenes/hub-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
   title: 'Blocks',
@@ -13,7 +14,7 @@ const config: Phaser.Types.Core.GameConfig = {
   zoom: 3,
   type: Phaser.AUTO,
   parent: 'game',
-  scene: [BootScene, GameScene],
+  scene: [BootScene, GameScene, HUDScene],
   backgroundColor: '#24232e',
   render: { pixelArt: true, antialias: false }
 };

@@ -19,6 +19,7 @@ export class Block extends Phaser.GameObjects.Sprite {
       this.alpha -= 0.02;
 
       if (this.alpha === 0) {
+        this.scene.events.emit('pointsChanged', 1);
         this.isDying = false;
         this.setType(0);
         this.setAlpha(1);

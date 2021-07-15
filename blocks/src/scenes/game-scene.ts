@@ -82,6 +82,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.checkMatches();
+    this.checkVictory();
 
     this.handleInput();
   }
@@ -170,6 +171,16 @@ export class GameScene extends Phaser.Scene {
     for (let i = 0; i < matches.length; i++) {
       this.currentLevelArray[matches[i]].activateDead();
     }
+  }
+
+  public checkVictory(): void {
+    for (let y = 1; y < this.currentLevelHeight - 1; y++)
+      for (let x = 1; x < this.currentLevelWidth - 1; x++) {
+        if (this.getBlockType(x, y) > 1) {
+          return;
+        }
+      }
+    this.events.emit('victory');
   }
 
   public isSameTypeAroundMe(x: number, y: number): boolean {
