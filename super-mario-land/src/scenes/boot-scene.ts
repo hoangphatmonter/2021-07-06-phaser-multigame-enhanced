@@ -10,7 +10,7 @@ export class BootScene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: 'BootScene'
+      key: 'BootScene',
     });
   }
 
@@ -52,6 +52,9 @@ export class BootScene extends Phaser.Scene {
 
     // load our package
     this.load.pack('preload', './assets/pack.json', 'preload');
+    this.load.setPath('assets/spine/');
+    this.load.spine('set1', 'demos.json', ['atlas1.atlas'], true);
+    this.load.setPath();
   }
 
   update(): void {

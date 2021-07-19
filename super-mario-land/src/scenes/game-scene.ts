@@ -2,6 +2,7 @@ import { Box } from '../objects/box';
 import { Brick } from '../objects/brick';
 import { Collectible } from '../objects/collectible';
 import { Goomba } from '../objects/goomba';
+import Hero from '../objects/hero';
 import { Mario } from '../objects/mario';
 import { Platform } from '../objects/platform';
 import { Portal } from '../objects/portal';
@@ -19,8 +20,11 @@ export class GameScene extends Phaser.Scene {
   private collectibles: Phaser.GameObjects.Group;
   private enemies: Phaser.GameObjects.Group;
   private platforms: Phaser.GameObjects.Group;
-  private player: Mario;
+  private player: Hero//Mario;
+  // private otherPlayer: Hero;
   private portals: Phaser.GameObjects.Group;
+
+  private sc: any;
 
   constructor() {
     super({
@@ -31,6 +35,31 @@ export class GameScene extends Phaser.Scene {
   init(): void { }
 
   create(): void {
+    // this.otherPlayer = new Hero(this, 14, 100, 'set1.spineboy', 'idle', true);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // this.otherPlayer = this.add.spine(14, 100, 'set1.spineboy', 'run', true).setScale(0.02);
+
+    // this.physics.add.existing(this.otherPlayer);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // this.otherPlayer.setInteractive();
+    // this.input.enableDebug(this.otherPlayer, 0xff00ff);
+
+    // this.otherPlayer = this.add.spine(14, 100, 'set1.spineboy', 'idle', true).setScale(0.05);
+    // this.otherPlayer.setSize(280, 280);
+
+    // this.sc = this.add.spineContainer(14, 100, this.otherPlayer);
+
+    // this.physics.add.existing(this.sc);
+
+    // this.sc.body.setOffset(0, 50);
+    // // this.sc.body.setSize();
+    // this.sc.body.setVelocity(100, 200);
+    // this.sc.body.setCollideWorldBounds(true);
+
+    // this.otherPlayer.setInteractive();
+
     // *****************************************************************
     // SETUP TILEMAP
     // *****************************************************************
@@ -94,14 +123,24 @@ export class GameScene extends Phaser.Scene {
     // *****************************************************************
     // COLLIDERS
     // *****************************************************************
-    this.physics.add.collider(this.player, this.foregroundLayer);
+    this.physics.add.collider(this.player.spine, this.foregroundLayer);
     this.physics.add.collider(this.enemies, this.foregroundLayer);
     this.physics.add.collider(this.enemies, this.boxes);
     this.physics.add.collider(this.enemies, this.bricks);
-    this.physics.add.collider(this.player, this.bricks);
+    this.physics.add.collider(this.player.spine, this.bricks);
+
+    // this.physics.add.collider(this.otherPlayer.spine, this.foregroundLayer);
+    // this.physics.add.collider(this.otherPlayer.spine, this.bricks);
+    // this.physics.add.collider(
+    //   this.player,
+    //   this.otherPlayer.spine,
+    //   () => { console.log('play hello other player') },
+    //   null,
+    //   this
+    // );
 
     this.physics.add.collider(
-      this.player,
+      this.player.spine,
       this.boxes,
       this.playerHitBox,
       null,
@@ -109,7 +148,7 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.physics.add.overlap(
-      this.player,
+      this.player.spine,
       this.enemies,
       this.handlePlayerEnemyOverlap,
       null,
@@ -117,7 +156,7 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.physics.add.overlap(
-      this.player,
+      this.player.spine,
       this.portals,
       this.handlePlayerPortalOverlap,
       null,
@@ -125,7 +164,7 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.physics.add.collider(
-      this.player,
+      this.player.spine,
       this.platforms,
       this.handlePlayerOnPlatform,
       null,
@@ -133,7 +172,7 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.physics.add.overlap(
-      this.player,
+      this.player.spine,
       this.collectibles,
       this.handlePlayerCollectiblesOverlap,
       null,
@@ -143,13 +182,17 @@ export class GameScene extends Phaser.Scene {
     // *****************************************************************
     // CAMERA
     // *****************************************************************
-    this.cameras.main.startFollow(this.player);
+    this.cameras.main.startFollow(this.player.spine);
     this.cameras.main.setBounds(  // tam hoat dong cua camera
       0,
       0,
       this.map.widthInPixels,
       this.map.heightInPixels
     );
+  }
+
+  private something() {
+
   }
 
   update(): void {
@@ -179,12 +222,13 @@ export class GameScene extends Phaser.Scene {
       }
 
       if (object.type === 'player') {
-        this.player = new Mario({
-          scene: this,
-          x: this.registry.get('spawn').x,
-          y: this.registry.get('spawn').y,
-          texture: 'mario'
-        });
+        // this.player = new Mario({
+        //   scene: this,
+        //   x: this.registry.get('spawn').x,
+        //   y: this.registry.get('spawn').y,
+        //   texture: 'mario'
+        // });
+        this.player = new Hero(this, 14, 100, 'set1.spineboy', 'idle', true);
       }
 
       if (object.type === 'goomba') {
@@ -290,7 +334,8 @@ export class GameScene extends Phaser.Scene {
   private handlePlayerEnemyOverlap(_player: Mario, _enemy: Goomba): void {
     if (_player.body.touching.down && _enemy.body.touching.up) {
       // player hit enemy on top
-      _player.bounceUpAfterHitEnemyOnHead();
+      // _player.bounceUpAfterHitEnemyOnHead();
+      this.player.bounceUpAfterHitEnemyOnHead();
       _enemy.gotHitOnHead();
       this.add.tween({
         targets: _enemy,
@@ -364,9 +409,9 @@ export class GameScene extends Phaser.Scene {
 
   private handlePlayerPortalOverlap(_player: Mario, _portal: Portal): void {
     if (
-      (_player.getKeys().get('DOWN').isDown &&
+      (this.player.getKeys().get('DOWN').isDown &&
         _portal.getPortalDestination().dir === 'down') ||
-      (_player.getKeys().get('RIGHT').isDown &&
+      (this.player.getKeys().get('RIGHT').isDown &&
         _portal.getPortalDestination().dir === 'right')
     ) {
       // set new level and new destination for mario
@@ -395,7 +440,7 @@ export class GameScene extends Phaser.Scene {
         break;
       }
       case 'mushroom': {
-        _player.growMario();
+        this.player.growMario();
         break;
       }
       case 'star': {
