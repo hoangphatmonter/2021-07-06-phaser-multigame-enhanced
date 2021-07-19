@@ -12,6 +12,7 @@ export default class Hero {
     private vulnerableCounter: number;
 
     private isRunning: boolean;
+    private isSitting: boolean;
     private scale: number;
 
     // input
@@ -33,7 +34,7 @@ export default class Hero {
         // super(scene, x, y);
         // super(scene, window.SpinePlugin, x, y);
 
-        this.sgo = scene.add.spine(14, 100, 'set1.spineboy', 'idle', true);
+        this.sgo = scene.add.spine(14, 100, 'spineboy', 'idle', true);
         this.sgo.setScale(0.02);
         scene.physics.add.existing(this.sgo, false);
 
@@ -67,6 +68,7 @@ export default class Hero {
         this.vulnerableCounter = 100;
 
         this.isRunning = false;
+        this.isSitting = false;
         this.scale = 0.02;
 
         // sprite
@@ -149,6 +151,8 @@ export default class Hero {
                 this.sgo.body.setOffset(this.sgo.width, 0);
                 console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
             }
+        } else if (this.keys.get('DOWN').isDown) {
+            this.sgo.body.setVelocityY(this.acceleration);
         } else {
             this.sgo.body.setVelocityX(0);
             this.sgo.body.setAccelerationX(0);
@@ -159,14 +163,24 @@ export default class Hero {
             this.sgo.body.setVelocityY(-180);
             this.isJumping = true;
             this.isRunning = false;
+            this.isSitting = false;
         }
     }
 
     private handleAnimations(): void {
         if (this.sgo.body.velocity.y !== 0) {
             // mario is jumping or falling
-            this.sgo.play('idle', true);
-            this.isRunning = false;
+            if (this.keys.get('DOWN').isDown && !this.isSitting) {
+                this.sgo.play('sit', false);
+                this.isRunning = false;
+                this.isSitting = true;
+                console.log('sit')
+            }
+            else if (!this.isSitting) {
+                this.sgo.play('idle', true);
+                this.isRunning = false;
+                // this.isSitting = false;
+            }
             if (this.marioSize === 'small') {
                 // this.sgo.setFrame(4);
             } else {
@@ -189,10 +203,12 @@ export default class Hero {
 
             if (Math.abs(this.sgo.body.velocity.x) > 0.05 && !this.isRunning) {
                 this.isRunning = true;
+                this.isSitting = false;
                 this.sgo.play('run', true);
             }
-            else if (Math.abs(this.sgo.body.velocity.x) <= 0.05)
+            else if (Math.abs(this.sgo.body.velocity.x) <= 0.05) {
                 this.isRunning = false;
+            }
             // else {
             //     this.sgo.play('run', true);
             // }
@@ -200,6 +216,7 @@ export default class Hero {
             // mario is standing still
             this.sgo.play('idle', true);
             this.isRunning = false;
+            this.isSitting = false;
             if (this.marioSize === 'small') {
                 // this.sgo.setFrame(0);
             } else {
@@ -275,6 +292,7 @@ export default class Hero {
             // this.sgo.body.stop();
             this.sgo.play('idle', true);
             this.isRunning = false;
+            this.isSitting = false;
 
             // make last dead jump and turn off collision check
             this.sgo.body.setVelocityY(-180);
