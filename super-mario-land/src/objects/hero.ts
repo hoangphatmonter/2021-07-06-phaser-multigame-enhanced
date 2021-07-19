@@ -1,4 +1,4 @@
-export default class Hero extends Phaser.GameObjects.Container {
+export default class Hero {
     // body: Phaser.Physics.Arcade.Body;
     private sgo: any;
 
@@ -10,6 +10,9 @@ export default class Hero extends Phaser.GameObjects.Container {
     private isDying: boolean;
     private isVulnerable: boolean;
     private vulnerableCounter: number;
+
+    private isRunning: boolean;
+    private scale: number;
 
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>;
@@ -27,11 +30,12 @@ export default class Hero extends Phaser.GameObjects.Container {
     }
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, anim: string, loop = false) {
-        super(scene, x, y);
+        // super(scene, x, y);
         // super(scene, window.SpinePlugin, x, y);
 
-        this.sgo = scene.add.spine(14, 100, 'set1.spineboy', 'idle', true).setScale(0.02);
-        scene.physics.add.existing(this.sgo)
+        this.sgo = scene.add.spine(14, 100, 'set1.spineboy', 'idle', true);
+        this.sgo.setScale(0.02);
+        scene.physics.add.existing(this.sgo, false);
 
         // scene.physics.add.existing(this)
         // this.sgo.body.setCollideWorldBounds(true);
@@ -62,9 +66,12 @@ export default class Hero extends Phaser.GameObjects.Container {
         this.isVulnerable = true;
         this.vulnerableCounter = 100;
 
+        this.isRunning = false;
+        this.scale = 0.02;
+
         // sprite
         // this.sgo.setOrigin(0.5, 0.5);
-        this.sgo.setFlipX(false);
+        // this.sgo.setFlipX(false);
 
         // input
         this.keys = new Map([
@@ -92,7 +99,7 @@ export default class Hero extends Phaser.GameObjects.Container {
         } else {
             // this.sgo.setFrame(12);
             this.sgo.play('death', false);
-            if (this.y > this.currentScene.sys.canvas.height) {
+            if (this.spine.y > this.currentScene.sys.canvas.height) {
                 this.currentScene.scene.stop('GameScene');
                 this.currentScene.scene.stop('HUDScene');
                 this.currentScene.scene.start('MenuScene');
@@ -110,7 +117,7 @@ export default class Hero extends Phaser.GameObjects.Container {
     }
 
     private handleInput() {
-        if (this.y > this.currentScene.sys.canvas.height) {
+        if (this.spine.y > this.currentScene.sys.canvas.height) {
             // mario fell into a hole
             this.isDying = true;
         }
@@ -129,10 +136,19 @@ export default class Hero extends Phaser.GameObjects.Container {
         // handle movements to left and right
         if (this.keys.get('RIGHT').isDown) {
             this.sgo.body.setAccelerationX(this.acceleration);
-            this.sgo.setFlipX(false);
+            if (this.sgo.scaleX < 0) {    // if not have if, body will fluctuate
+                this.sgo.setScale(this.scale, this.scale); // this.sgo.setFlipX(false);
+                this.sgo.body.setOffset(0, 0);
+            }
         } else if (this.keys.get('LEFT').isDown) {
             this.sgo.body.setAccelerationX(-this.acceleration);
-            this.sgo.setFlipX(true);
+            // this.sgo.setFlipX(true);
+            if (this.sgo.scaleX > 0) {
+                this.sgo.setScale(-this.scale, this.scale); // this.sgo.setFlipX(true);
+                // this.sgo.setSize(this.sgo.width, this.sgo.height);
+                this.sgo.body.setOffset(this.sgo.width, 0);
+                console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
+            }
         } else {
             this.sgo.body.setVelocityX(0);
             this.sgo.body.setAccelerationX(0);
@@ -142,6 +158,7 @@ export default class Hero extends Phaser.GameObjects.Container {
         if (this.keys.get('JUMP').isDown && !this.isJumping) {
             this.sgo.body.setVelocityY(-180);
             this.isJumping = true;
+            this.isRunning = false;
         }
     }
 
@@ -149,6 +166,7 @@ export default class Hero extends Phaser.GameObjects.Container {
         if (this.sgo.body.velocity.y !== 0) {
             // mario is jumping or falling
             this.sgo.play('idle', true);
+            this.isRunning = false;
             if (this.marioSize === 'small') {
                 // this.sgo.setFrame(4);
             } else {
@@ -169,14 +187,19 @@ export default class Hero extends Phaser.GameObjects.Container {
                 }
             }
 
-            if (this.sgo.body.velocity.x > 0) {
-                this.sgo.play('run', true);
-            } else {
+            if (Math.abs(this.sgo.body.velocity.x) > 0.05 && !this.isRunning) {
+                this.isRunning = true;
                 this.sgo.play('run', true);
             }
+            else if (Math.abs(this.sgo.body.velocity.x) <= 0.05)
+                this.isRunning = false;
+            // else {
+            //     this.sgo.play('run', true);
+            // }
         } else {
             // mario is standing still
             this.sgo.play('idle', true);
+            this.isRunning = false;
             if (this.marioSize === 'small') {
                 // this.sgo.setFrame(0);
             } else {
@@ -198,23 +221,41 @@ export default class Hero extends Phaser.GameObjects.Container {
     private shrinkMario(): void {
         this.marioSize = 'small';
         this.currentScene.registry.set('marioSize', 'small');
-        // this.adjustPhysicBodyToSmallSize();
+        this.adjustPhysicBodyToSmallSize();
     }
 
-    //   private adjustPhysicBodyToSmallSize(): void {
-    //     this.sgo.body.setSize(6, 12);
-    //     this.sgo.body.setOffset(6, 4);
-    //   }
+    private adjustPhysicBodyToSmallSize(): void {
+        this.scale = 0.02;
+        // this.sgo.body.setSize(6, 12);
+        // this.sgo.body.setOffset(6, 4);
+        if (this.sgo.scaleX > 0) {
+            this.sgo.setScale(this.scale, this.scale);
+        }
+        else
+            this.sgo.setScale(-this.scale, this.scale);
+        this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+    }
 
     private adjustPhysicBodyToBigSize(): void {
-        this.sgo.body.setSize(8, 16);
-        this.sgo.body.setOffset(4, 0);
+        // this.sgo.body.setSize(8, 16);
+        // this.sgo.body.setOffset(4, 0);
+        this.scale = 0.025;
+        if (this.sgo.scaleX > 0) {
+            this.sgo.setScale(this.scale, this.scale); // this.sgo.setFlipX(true);
+            this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+            this.sgo.body.setOffset(0, 0);
+        } else {
+            this.sgo.setScale(-this.scale, this.scale); // this.sgo.setFlipX(true);
+            // this.sgo.setSize(this.sgo.width, this.sgo.height);
+            // this.sgo.body.setSize(1, 1);
+            this.sgo.body.setOffset(this.sgo.width, 0);
+        }
     }
 
     public bounceUpAfterHitEnemyOnHead(): void {
         this.currentScene.add.tween({
             targets: this.sgo,
-            props: { y: this.y - 5 },
+            props: { y: this.spine.y - 5 },
             duration: 200,
             ease: 'Power1',
             yoyo: true
@@ -233,6 +274,7 @@ export default class Hero extends Phaser.GameObjects.Container {
             // stop all animations
             // this.sgo.body.stop();
             this.sgo.play('idle', true);
+            this.isRunning = false;
 
             // make last dead jump and turn off collision check
             this.sgo.body.setVelocityY(-180);

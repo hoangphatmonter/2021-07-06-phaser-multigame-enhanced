@@ -332,7 +332,7 @@ export class GameScene extends Phaser.Scene {
    * @param _enemy  [Enemy]
    */
   private handlePlayerEnemyOverlap(_player: Mario, _enemy: Goomba): void {
-    if (_player.body.touching.down && _enemy.body.touching.up) {
+    if (this.player.spine.body.touching.down && _enemy.body.touching.up) {
       // player hit enemy on top
       // _player.bounceUpAfterHitEnemyOnHead();
       this.player.bounceUpAfterHitEnemyOnHead();
@@ -349,8 +349,8 @@ export class GameScene extends Phaser.Scene {
       });
     } else {
       // player got hit from the side or on the head
-      if (_player.getVulnerable()) {
-        _player.gotHit();
+      if (this.player.getVulnerable()) {
+        this.player.gotHit();
       }
     }
   }
