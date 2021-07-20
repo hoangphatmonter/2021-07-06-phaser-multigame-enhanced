@@ -7,6 +7,7 @@
 - [sprite vs sprite.body](https://phaser.discourse.group/t/solved-setsize-not-working-on-scaled-sprites/3714)
 - About spine:
   - scale object will not automatically update collider: need update `spine.body.setSize(x,y)`
+  - in a time of a animation: size of spine will assign to a first frame of a animetion => require `spine.refresh()` to update the data (position, size, rotation) of the spine. This can make the collider bounce because of the change every update()
 # References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)
 - [Spine expample Phaser 3](https://labs.phaser.io/index.html?dir=spine/&q=)

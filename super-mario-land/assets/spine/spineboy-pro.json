@@ -1,6 +1,6 @@
 {
 	"skeleton": {
-		"hash": "SjqLSzXLIcUxaArZfF4SfpXGYzU",
+		"hash": "UtGTfR+4JJsPiM58QXlmhJ/uuGA",
 		"spine": "3.8.0",
 		"x": -190.66,
 		"y": -8,
@@ -1708,13 +1708,13 @@
 						"height": 152
 					}
 				},
-				"exhaust2": {
+				"hoverglow-rear": {
 					"hoverglow-small": {
-						"x": 0.01,
-						"y": -0.76,
-						"scaleX": 0.4208,
-						"scaleY": 0.8403,
-						"rotation": -89.25,
+						"x": 1.39,
+						"y": -2.09,
+						"scaleX": 0.303,
+						"scaleY": 0.495,
+						"rotation": 0.61,
 						"width": 274,
 						"height": 75
 					}
@@ -1744,18 +1744,10 @@
 						"height": 64
 					}
 				},
-				"portal-flare10": {
-					"portal-flare1": {
-						"width": 111,
-						"height": 60
-					},
-					"portal-flare2": {
-						"width": 114,
-						"height": 61
-					},
-					"portal-flare3": {
-						"width": 115,
-						"height": 59
+				"portal-shade": {
+					"portal-shade": {
+						"width": 266,
+						"height": 266
 					}
 				},
 				"front-upper-arm": {
@@ -1765,6 +1757,103 @@
 						"rotation": 97.9,
 						"width": 46,
 						"height": 97
+					}
+				},
+				"mouth": {
+					"mouth-grind": {
+						"type": "mesh",
+						"uvs": [
+							1,
+							1,
+							0,
+							1,
+							0,
+							0,
+							1,
+							0
+						],
+						"triangles": [
+							1,
+							3,
+							0,
+							1,
+							2,
+							3
+						],
+						"vertices": [
+							11.28,
+							-85.88,
+							-19.56,
+							1.84,
+							36.09,
+							21.41,
+							66.93,
+							-66.32
+						],
+						"hull": 4,
+						"edges": [
+							0,
+							2,
+							2,
+							4,
+							4,
+							6,
+							0,
+							6
+						],
+						"width": 93,
+						"height": 59
+					},
+					"mouth-oooo": {
+						"x": 23.69,
+						"y": -32.24,
+						"rotation": -70.63,
+						"width": 93,
+						"height": 59
+					},
+					"mouth-smile": {
+						"type": "mesh",
+						"uvs": [
+							1,
+							1,
+							0,
+							1,
+							0,
+							0,
+							1,
+							0
+						],
+						"triangles": [
+							1,
+							2,
+							3,
+							1,
+							3,
+							0
+						],
+						"vertices": [
+							11.28,
+							-85.89,
+							-19.56,
+							1.85,
+							36.1,
+							21.42,
+							66.94,
+							-66.32
+						],
+						"hull": 4,
+						"edges": [
+							0,
+							2,
+							2,
+							4,
+							4,
+							6,
+							0,
+							6
+						],
+						"width": 93,
+						"height": 59
 					}
 				},
 				"front-foot": {
@@ -2019,25 +2108,10 @@
 						"height": 209
 					}
 				},
-				"portal-shade": {
-					"portal-shade": {
-						"width": 266,
-						"height": 266
-					}
-				},
 				"crosshair": {
 					"crosshair": {
 						"width": 89,
 						"height": 89
-					}
-				},
-				"front-bracer": {
-					"front-bracer": {
-						"x": 12.03,
-						"y": -1.68,
-						"rotation": 79.6,
-						"width": 58,
-						"height": 80
 					}
 				},
 				"portal-flare1": {
@@ -2096,15 +2170,18 @@
 						"height": 59
 					}
 				},
-				"hoverglow-rear": {
-					"hoverglow-small": {
-						"x": 1.39,
-						"y": -2.09,
-						"scaleX": 0.303,
-						"scaleY": 0.495,
-						"rotation": 0.61,
-						"width": 274,
-						"height": 75
+				"portal-flare5": {
+					"portal-flare1": {
+						"width": 111,
+						"height": 60
+					},
+					"portal-flare2": {
+						"width": 114,
+						"height": 61
+					},
+					"portal-flare3": {
+						"width": 115,
+						"height": 59
 					}
 				},
 				"portal-flare6": {
@@ -2172,13 +2249,13 @@
 						"height": 94
 					}
 				},
-				"exhaust1": {
-					"hoverglow-small": {
-						"scaleX": 0.4629,
-						"scaleY": 0.8129,
-						"rotation": -83.07,
-						"width": 274,
-						"height": 75
+				"rear-upper-arm": {
+					"rear-upper-arm": {
+						"x": 21.13,
+						"y": 4.09,
+						"rotation": 89.33,
+						"width": 40,
+						"height": 87
 					}
 				},
 				"eye": {
@@ -2288,13 +2365,13 @@
 						"color": "ce3a3aff"
 					}
 				},
-				"rear-shin": {
-					"rear-shin": {
-						"x": 58.29,
-						"y": -2.75,
-						"rotation": 92.37,
-						"width": 75,
-						"height": 178
+				"front-bracer": {
+					"front-bracer": {
+						"x": 12.03,
+						"y": -1.68,
+						"rotation": 79.6,
+						"width": 58,
+						"height": 80
 					}
 				},
 				"portal-bg": {
@@ -2307,110 +2384,24 @@
 						"height": 266
 					}
 				},
-				"mouth": {
-					"mouth-grind": {
-						"type": "mesh",
-						"uvs": [
-							1,
-							1,
-							0,
-							1,
-							0,
-							0,
-							1,
-							0
-						],
-						"triangles": [
-							1,
-							3,
-							0,
-							1,
-							2,
-							3
-						],
-						"vertices": [
-							11.28,
-							-85.88,
-							-19.56,
-							1.84,
-							36.09,
-							21.41,
-							66.93,
-							-66.32
-						],
-						"hull": 4,
-						"edges": [
-							0,
-							2,
-							2,
-							4,
-							4,
-							6,
-							0,
-							6
-						],
-						"width": 93,
-						"height": 59
-					},
-					"mouth-oooo": {
-						"x": 23.69,
-						"y": -32.24,
-						"rotation": -70.63,
-						"width": 93,
-						"height": 59
-					},
-					"mouth-smile": {
-						"type": "mesh",
-						"uvs": [
-							1,
-							1,
-							0,
-							1,
-							0,
-							0,
-							1,
-							0
-						],
-						"triangles": [
-							1,
-							2,
-							3,
-							1,
-							3,
-							0
-						],
-						"vertices": [
-							11.28,
-							-85.89,
-							-19.56,
-							1.85,
-							36.1,
-							21.42,
-							66.94,
-							-66.32
-						],
-						"hull": 4,
-						"edges": [
-							0,
-							2,
-							2,
-							4,
-							4,
-							6,
-							0,
-							6
-						],
-						"width": 93,
-						"height": 59
+				"exhaust1": {
+					"hoverglow-small": {
+						"scaleX": 0.4629,
+						"scaleY": 0.8129,
+						"rotation": -83.07,
+						"width": 274,
+						"height": 75
 					}
 				},
-				"rear-upper-arm": {
-					"rear-upper-arm": {
-						"x": 21.13,
-						"y": 4.09,
-						"rotation": 89.33,
-						"width": 40,
-						"height": 87
+				"exhaust2": {
+					"hoverglow-small": {
+						"x": 0.01,
+						"y": -0.76,
+						"scaleX": 0.4208,
+						"scaleY": 0.8403,
+						"rotation": -89.25,
+						"width": 274,
+						"height": 75
 					}
 				},
 				"exhaust3": {
@@ -3026,6 +3017,15 @@
 						],
 						"width": 261,
 						"height": 166
+					}
+				},
+				"rear-shin": {
+					"rear-shin": {
+						"x": 58.29,
+						"y": -2.75,
+						"rotation": 92.37,
+						"width": 75,
+						"height": 178
 					}
 				},
 				"portal-streaks1": {
@@ -4649,20 +4649,6 @@
 						"height": 180
 					}
 				},
-				"portal-flare5": {
-					"portal-flare1": {
-						"width": 111,
-						"height": 60
-					},
-					"portal-flare2": {
-						"width": 114,
-						"height": 61
-					},
-					"portal-flare3": {
-						"width": 115,
-						"height": 59
-					}
-				},
 				"rear-foot": {
 					"rear-foot": {
 						"type": "mesh",
@@ -5486,6 +5472,20 @@
 						],
 						"width": 82,
 						"height": 184
+					}
+				},
+				"portal-flare10": {
+					"portal-flare1": {
+						"width": 111,
+						"height": 60
+					},
+					"portal-flare2": {
+						"width": 114,
+						"height": 61
+					},
+					"portal-flare3": {
+						"width": 115,
+						"height": 59
 					}
 				}
 			}
@@ -6330,6 +6330,686 @@
 						"mix": 0
 					}
 				]
+			}
+		},
+		"fly": {
+			"bones": {
+				"root": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"hip": {
+					"rotate": [
+						{},
+						{
+							"time": 0.1667,
+							"angle": -94.95
+						}
+					],
+					"translate": [
+						{},
+						{
+							"time": 0.1667,
+							"x": 376.59,
+							"y": -178.64
+						}
+					]
+				},
+				"crosshair": {
+					"rotate": [
+						{}
+					],
+					"translate": [
+						{}
+					]
+				},
+				"aim-constraint-target": {
+					"rotate": [
+						{
+							"angle": 26.75
+						},
+						{
+							"time": 0.1667,
+							"angle": 174.31
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-foot-target": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-leg-target": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-thigh": {
+					"rotate": [
+						{
+							"angle": 0.79
+						},
+						{
+							"time": 0.1667,
+							"angle": -7.87
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-shin": {
+					"rotate": [
+						{
+							"angle": -1.52
+						},
+						{
+							"time": 0.1667,
+							"angle": 18.95
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-foot": {
+					"rotate": [
+						{
+							"angle": -0.16
+						},
+						{
+							"time": 0.1667,
+							"angle": -24.63
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"back-foot-tip": {
+					"rotate": [
+						{},
+						{
+							"time": 0.1667,
+							"angle": -82.69
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"clipping": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"torso": {
+					"rotate": [
+						{},
+						{
+							"time": 0.1667,
+							"angle": -4.46
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"torso2": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"torso3": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-upper-arm": {
+					"rotate": [
+						{},
+						{
+							"time": 0.1667,
+							"angle": 164.77
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-bracer": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-fist": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-foot-target": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-leg-target": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-thigh": {
+					"rotate": [
+						{
+							"angle": -2.41
+						},
+						{
+							"time": 0.1667,
+							"angle": 17.37
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-shin": {
+					"rotate": [
+						{
+							"angle": 3.38,
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667,
+							"angle": 3.38
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-foot": {
+					"rotate": [
+						{
+							"angle": -0.42
+						},
+						{
+							"time": 0.1667,
+							"angle": -40.9
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"front-foot-tip": {
+					"rotate": [
+						{},
+						{
+							"time": 0.1667,
+							"angle": -83.28
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-upper-arm": {
+					"rotate": [
+						{},
+						{
+							"time": 0.1667,
+							"angle": 137.41
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"rear-bracer": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"gun": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"gun-tip": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"neck": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"head": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"hair1": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"hair2": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"hair3": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"hair4": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"muzzle": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"muzzle-ring": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"muzzle-ring2": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"muzzle-ring3": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				},
+				"muzzle-ring4": {
+					"rotate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					],
+					"translate": [
+						{
+							"curve": "stepped"
+						},
+						{
+							"time": 0.1667
+						}
+					]
+				}
 			}
 		},
 		"hoverboard": {
