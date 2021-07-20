@@ -14,6 +14,8 @@ export default class Hero {
     private isRunning: boolean;
     private isSitting: boolean;
     private scale: number;
+    private offsetX: number;
+    private offsetY: number;
 
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>;
@@ -70,6 +72,8 @@ export default class Hero {
         this.isRunning = false;
         this.isSitting = false;
         this.scale = 0.02;
+        this.offsetX = this.sgo.width;
+        this.offsetY = this.sgo.height;
 
         // sprite
         // this.sgo.setOrigin(0.5, 0.5);
@@ -140,7 +144,9 @@ export default class Hero {
             this.sgo.body.setAccelerationX(this.acceleration);
             if (this.sgo.scaleX < 0) {    // if not have if, body will fluctuate
                 this.sgo.setScale(this.scale, this.scale); // this.sgo.setFlipX(false);
-                this.sgo.body.setOffset(0, 0);
+                this.offsetX = 0;
+                this.offsetY = 0;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
             }
         } else if (this.keys.get('LEFT').isDown) {
             this.sgo.body.setAccelerationX(-this.acceleration);
@@ -148,7 +154,9 @@ export default class Hero {
             if (this.sgo.scaleX > 0) {
                 this.sgo.setScale(-this.scale, this.scale); // this.sgo.setFlipX(true);
                 // this.sgo.setSize(this.sgo.width, this.sgo.height);
-                this.sgo.body.setOffset(this.sgo.width, 0);
+                this.offsetX = this.sgo.width;
+                this.offsetY = 0;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
                 console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
             }
         } else if (this.keys.get('DOWN').isDown) {
@@ -172,12 +180,28 @@ export default class Hero {
             // mario is jumping or falling
             if (this.keys.get('DOWN').isDown && !this.isSitting) {
                 this.sgo.play('sit', false);
+                this.sgo.body.setSize(this.sgo.width, this.sgo.height / 1.5);
+                if (this.sgo.scaleX > 0) {
+                    this.offsetX = 0;
+                } else {
+                    this.offsetX = this.sgo.width;
+                }
+                this.offsetY = this.sgo.height - this.sgo.height / 1.5;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
                 this.isRunning = false;
                 this.isSitting = true;
                 console.log('sit')
             }
             else if (!this.isSitting) {
                 this.sgo.play('idle', true);
+                this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+                if (this.sgo.scaleX > 0) {
+                    this.offsetX = 0;
+                } else {
+                    this.offsetX = this.sgo.width;
+                }
+                this.offsetY = 0;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
                 this.isRunning = false;
                 // this.isSitting = false;
             }
@@ -205,6 +229,8 @@ export default class Hero {
                 this.isRunning = true;
                 this.isSitting = false;
                 this.sgo.play('run', true);
+                this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+                // this.sgo.body.setOffset(0, 0);
             }
             else if (Math.abs(this.sgo.body.velocity.x) <= 0.05) {
                 this.isRunning = false;
@@ -215,6 +241,9 @@ export default class Hero {
         } else {
             // mario is standing still
             this.sgo.play('idle', true);
+            this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+            this.offsetY = 0;
+            this.sgo.body.setOffset(this.offsetX, this.offsetY);
             this.isRunning = false;
             this.isSitting = false;
             if (this.marioSize === 'small') {
@@ -291,6 +320,8 @@ export default class Hero {
             // stop all animations
             // this.sgo.body.stop();
             this.sgo.play('idle', true);
+            this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+            this.sgo.body.setOffset(0, 0);
             this.isRunning = false;
             this.isSitting = false;
 

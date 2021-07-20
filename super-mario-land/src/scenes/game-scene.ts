@@ -189,6 +189,7 @@ export class GameScene extends Phaser.Scene {
       this.map.widthInPixels,
       this.map.heightInPixels
     );
+    // this.cameras.main.setZoom(0.5, 0.5);
   }
 
   private something() {
