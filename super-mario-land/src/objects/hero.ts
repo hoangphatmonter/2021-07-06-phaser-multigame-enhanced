@@ -21,6 +21,9 @@ export default class Hero {
     private offsetY: number;
     private isFlying: boolean;
 
+    private allowClimb: boolean;
+    private isClimbing: boolean;
+
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>;
 
@@ -36,11 +39,20 @@ export default class Hero {
         return this.sgo
     }
 
+    set climb(val: boolean) {
+        this.allowClimb = val;
+    }
+
+    get climb() {
+        return this.allowClimb;
+    }
+
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, anim: string, loop = false) {
         // super(scene, x, y);
         // super(scene, window.SpinePlugin, x, y);
         this.scene = scene;
         this.sgo = scene.add.spine(14, 100, 'spineboy', 'idle', true);
+        this.sgo.depth = 100;
         this.sgo.setScale(0.02);
         scene.physics.add.existing(this.sgo, false);
 
@@ -79,6 +91,8 @@ export default class Hero {
         this.offsetX = this.sgo.width;
         this.offsetY = this.sgo.height;
         this.isFlying = false;
+        this.isClimbing = false;
+        this.allowClimb = false;
 
         // sprite
         // this.sgo.setOrigin(0.5, 0.5);
@@ -106,8 +120,17 @@ export default class Hero {
     }
 
     update(): void {
+        console.log(this.spine.body.velocity, this.spine.body.acceleration)
         if (!this.isDying) {
-            if (this.keys.get('FLY').isDown) {
+            if (this.spine.body.touching.none) {
+                // out of the ladder
+                this.allowClimb = false;
+                this.isClimbing = false;
+                this.spine.body.setAccelerationY(0)
+                console.log('out of the ladder');
+            }
+
+            if (this.keys.get('FLY').isDown && !this.allowClimb) {
                 this.keys.get('FLY').isDown = false;
                 if (this.sgo.body.allowGravity === false) {
                     this.sgo.body.setAllowGravity(true);
@@ -120,7 +143,13 @@ export default class Hero {
 
             if (this.sgo.body.allowGravity) {
                 this.handleInput();
-                this.handleGroundAnimations();
+                if (this.allowClimb) {
+                    this.isRunning = false;
+                    this.isSitting = false;
+                    this.handleClimb();
+                    this.handleClimbAnimations();
+                } else
+                    this.handleGroundAnimations();
             } else {
                 this.handleAirInput();
                 this.handleAirAnimations();
@@ -307,6 +336,7 @@ export default class Hero {
                 this.isRunning = true;
                 this.isSitting = false;
                 this.sgo.play('run', true);
+                console.log('runaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 this.sgo.body.setSize(this.sgo.width, this.sgo.height);
                 // this.sgo.body.setOffset(0, 0);
             }
@@ -339,6 +369,46 @@ export default class Hero {
                 }
             }
         }
+    }
+
+    private handleClimb() {
+        if (this.spine.y > this.currentScene.sys.canvas.height) {
+            // mario fell into a hole
+            this.isDying = true;
+        }
+
+
+        if (this.keys.get('DOWN').isDown) {     // will duplicate the DOWN in the hanldGroundAnimation and Input
+            this.sgo.body.setAccelerationY(this.acceleration);
+
+        } else if (this.keys.get('UP').isDown) {
+            this.sgo.body.setAccelerationY(-this.acceleration);
+        } else if (this.keys.get('LEFT').isDown) {
+            // use ground method
+        } else if (this.keys.get('RIGHT').isDown) {
+            // use ground method
+        }
+        else {
+
+            this.sgo.body.setVelocityY(0);
+            this.sgo.body.setAccelerationY(0);
+        }
+    }
+
+    private handleClimbAnimations() {
+        if (!this.isClimbing) {
+            this.sgo.play('climb', true);
+            // this.sgo.state.timeScale = 0;
+            this.isClimbing = true;
+        }
+        this.sgo.refresh();
+        this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+        if (this.sgo.scaleX > 0) {
+            this.offsetX = 0;
+        } else {
+            this.offsetX = this.sgo.width;
+        }
+        this.sgo.body.setOffset(this.offsetX, this.offsetY);
     }
 
     public growMario(): void {

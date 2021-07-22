@@ -25,7 +25,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     }
   },
   backgroundColor: '#f8f8f8',
-  render: { pixelArt: true, antialias: false },
+  // render: { pixelArt: true, antialias: false },
   plugins: {
     scene: [
       { key: 'SpinePlugin', plugin: window.SpinePlugin, mapping: 'spine' }

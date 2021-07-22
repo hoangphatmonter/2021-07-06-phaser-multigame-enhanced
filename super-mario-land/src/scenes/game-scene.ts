@@ -6,6 +6,7 @@ import Hero from '../objects/hero';
 import { Mario } from '../objects/mario';
 import { Platform } from '../objects/platform';
 import { Portal } from '../objects/portal';
+import { Rope } from '../objects/Rope';
 
 export class GameScene extends Phaser.Scene {
   // tilemap
@@ -20,6 +21,8 @@ export class GameScene extends Phaser.Scene {
   private collectibles: Phaser.GameObjects.Group;
   private enemies: Phaser.GameObjects.Group;
   private platforms: Phaser.GameObjects.Group;
+  private ropes: Phaser.GameObjects.Group;
+  private airbricks: Phaser.GameObjects.Group;
   private player: Hero//Mario;
   // private otherPlayer: Hero;
   private portals: Phaser.GameObjects.Group;
@@ -118,6 +121,13 @@ export class GameScene extends Phaser.Scene {
       runChildUpdate: true
     });
 
+    this.ropes = this.add.group({
+      runChildUpdate: true
+    });
+    this.airbricks = this.add.group({
+      runChildUpdate: true
+    })
+
     this.loadObjectsFromTilemap();
 
     // *****************************************************************
@@ -173,6 +183,21 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(
       this.player.spine,
+      this.ropes,
+      this.handlePlayerInRopes,
+      null,
+      this
+    );
+    this.physics.add.collider(
+      this.player.spine,
+      this.airbricks,
+      null,
+      () => { return !this.player.climb; },
+      this
+    );
+
+    this.physics.add.overlap(
+      this.player.spine,
       this.collectibles,
       this.handlePlayerCollectiblesOverlap,
       null,
@@ -192,12 +217,9 @@ export class GameScene extends Phaser.Scene {
     // this.cameras.main.setZoom(0.5, 0.5);
   }
 
-  private something() {
-
-  }
-
   update(): void {
     this.player.update();
+    // this.children.depthSort();
   }
 
   private loadObjectsFromTilemap(): void {
@@ -324,6 +346,28 @@ export class GameScene extends Phaser.Scene {
         texture: 'star',
         points: 1000
       })
+    );
+    this.ropes.add(
+      new Rope({
+        scene: this,
+        x: 110,
+        y: 80,
+        texture: '',
+        tweenProps: ''
+      })
+    );
+    // this.ropes.add(
+    //   this.add.graphics().setDepth(0).fillStyle(0xff00ff, 1).fillRect(120, 80, 4, 40)
+    // );
+
+    this.airbricks.add(
+      new Box({
+        scene: this,
+        content: 'rotatingCoin',
+        x: 110,
+        y: 75,
+        texture: 'box'
+      }).setDepth(50)
     );
   }
 
@@ -462,5 +506,9 @@ export class GameScene extends Phaser.Scene {
       player.body.touching.down
     ) {
     }
+  }
+  private handlePlayerInRopes(player: Mario, rope: Rope): void {
+    if (!this.player.climb)
+      this.player.climb = true;
   }
 }
