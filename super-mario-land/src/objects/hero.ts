@@ -120,14 +120,12 @@ export default class Hero {
     }
 
     update(): void {
-        console.log(this.spine.body.velocity, this.spine.body.acceleration)
         if (!this.isDying) {
             if (this.spine.body.touching.none) {
                 // out of the ladder
                 this.allowClimb = false;
                 this.isClimbing = false;
                 this.spine.body.setAccelerationY(0)
-                console.log('out of the ladder');
             }
 
             if (this.keys.get('FLY').isDown && !this.allowClimb) {
@@ -209,7 +207,7 @@ export default class Hero {
                 this.offsetX = this.sgo.width;
                 this.offsetY = 0;
                 this.sgo.body.setOffset(this.offsetX, this.offsetY);
-                console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
+                // console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
             }
         } else if (this.keys.get('DOWN').isDown) {
             this.sgo.body.setVelocityY(this.acceleration);
@@ -276,7 +274,7 @@ export default class Hero {
             this.offsetX = this.sgo.width;
         }
         // this.offsetY = this.sgo.height / 1.5;
-        console.log(this.sgo.width, this.sgo.height)
+        // console.log(this.sgo.width, this.sgo.height)
         this.sgo.body.setOffset(this.offsetX, this.offsetY);
     }
 
@@ -297,7 +295,7 @@ export default class Hero {
                 this.sgo.body.setOffset(this.offsetX, this.offsetY);
                 this.isRunning = false;
                 this.isSitting = true;
-                console.log('sit')
+                // console.log('sit')
             }
             else if (!this.isSitting) {
                 this.sgo.play('idle', true);
@@ -336,7 +334,7 @@ export default class Hero {
                 this.isRunning = true;
                 this.isSitting = false;
                 this.sgo.play('run', true);
-                console.log('runaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                // console.log('runaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 this.sgo.body.setSize(this.sgo.width, this.sgo.height);
                 // this.sgo.body.setOffset(0, 0);
             }

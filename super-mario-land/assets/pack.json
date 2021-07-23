@@ -28,6 +28,11 @@
         "url": "./assets/tiles/tiles.png"
       },
       {
+        "type": "image",
+        "key": "OverWorld",
+        "url": "./assets/newmap/Mario1/Tilesets/OverWorld.png"
+      },
+      {
         "type": "json",
         "key": "animationJSON",
         "url": "./assets/animations/animations.json"

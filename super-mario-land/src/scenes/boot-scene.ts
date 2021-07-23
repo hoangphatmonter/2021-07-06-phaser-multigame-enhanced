@@ -52,6 +52,7 @@ export class BootScene extends Phaser.Scene {
 
     // load our package
     this.load.pack('preload', './assets/pack.json', 'preload');
+    // this.load.image("OverWorld", './assets/new map/Mario1/Tilesets/OverWorld.png');
     this.load.setPath('assets/spine/');
     // this.load.spine('set1', 'demos.json', ['atlas1.atlas'], true);
     this.load.spine('spineboy', 'spineboy-pro.json', 'spineboy-pro.atlas', true);

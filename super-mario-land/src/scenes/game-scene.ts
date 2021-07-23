@@ -12,6 +12,7 @@ export class GameScene extends Phaser.Scene {
   // tilemap
   private map: Phaser.Tilemaps.Tilemap;
   private tileset: Phaser.Tilemaps.Tileset;
+  private overWorldTileset: Phaser.Tilemaps.Tileset;
   private backgroundLayer: Phaser.Tilemaps.TilemapLayer;
   private foregroundLayer: Phaser.Tilemaps.TilemapLayer;
 
@@ -71,6 +72,7 @@ export class GameScene extends Phaser.Scene {
     this.map = this.make.tilemap({ key: this.registry.get('level') });  // json that store position of all objects
     // add our tileset and layers to our tilemap
     this.tileset = this.map.addTilesetImage('tiles'); // image of all objects
+    this.overWorldTileset = this.map.addTilesetImage('OverWorld');
     this.backgroundLayer = this.map.createLayer(
       'backgroundLayer',
       this.tileset,
@@ -80,7 +82,7 @@ export class GameScene extends Phaser.Scene {
 
     this.foregroundLayer = this.map.createLayer(
       'foregroundLayer',
-      this.tileset,
+      [this.tileset, this.overWorldTileset],
       0,
       0
     );
