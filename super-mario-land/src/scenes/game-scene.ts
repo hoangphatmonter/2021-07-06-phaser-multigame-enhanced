@@ -9,11 +9,13 @@ import { Portal } from '../objects/portal';
 import { Rope } from '../objects/Rope';
 
 export class GameScene extends Phaser.Scene {
+  //#region graphicsfield 
   // tilemap
   private map: Phaser.Tilemaps.Tilemap;
   private tileset: Phaser.Tilemaps.Tileset;
   private backgroundLayer: Phaser.Tilemaps.TilemapLayer;
   private foregroundLayer: Phaser.Tilemaps.TilemapLayer;
+  //#endregion
 
   // game objects
   private boxes: Phaser.GameObjects.Group;
@@ -22,6 +24,7 @@ export class GameScene extends Phaser.Scene {
   private enemies: Phaser.GameObjects.Group;
   private platforms: Phaser.GameObjects.Group;
   private ropes: Phaser.GameObjects.Group;
+  private horizonRopes: Phaser.GameObjects.Group;
   private airbricks: Phaser.GameObjects.Group;
   private player: Hero//Mario;
   // private otherPlayer: Hero;
@@ -124,6 +127,9 @@ export class GameScene extends Phaser.Scene {
     this.ropes = this.add.group({
       runChildUpdate: true
     });
+    this.horizonRopes = this.add.group({
+      runChildUpdate: true
+    });
     this.airbricks = this.add.group({
       runChildUpdate: true
     })
@@ -185,6 +191,13 @@ export class GameScene extends Phaser.Scene {
       this.player.spine,
       this.ropes,
       this.handlePlayerInRopes,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.player.spine,
+      this.horizonRopes,
+      this.handlePlayerInHorizonRopes,
       null,
       this
     );
@@ -354,11 +367,21 @@ export class GameScene extends Phaser.Scene {
         y: 80,
         texture: '',
         tweenProps: ''
-      })
+      }, 4, 40)
     );
     // this.ropes.add(
     //   this.add.graphics().setDepth(0).fillStyle(0xff00ff, 1).fillRect(120, 80, 4, 40)
     // );
+
+    this.horizonRopes.add(
+      new Rope({
+        scene: this,
+        x: 130,
+        y: 73,
+        texture: '',
+        tweenProps: ''
+      }, 40, 4)
+    )
 
     this.airbricks.add(
       new Box({
@@ -510,5 +533,9 @@ export class GameScene extends Phaser.Scene {
   private handlePlayerInRopes(player: Mario, rope: Rope): void {
     if (!this.player.climb)
       this.player.climb = true;
+  }
+  private handlePlayerInHorizonRopes(player: Mario, rope: Rope): void {
+    if (!this.player.isSwing)
+      this.player.setSwing(true, rope.x, rope.y);
   }
 }

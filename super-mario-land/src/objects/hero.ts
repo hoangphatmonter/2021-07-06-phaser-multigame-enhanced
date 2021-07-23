@@ -24,6 +24,9 @@ export default class Hero {
     private allowClimb: boolean;
     private isClimbing: boolean;
 
+    private allowSwing: boolean;
+    private swing: { isSwinging: boolean, objX: number, objY: number }
+
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>;
 
@@ -39,12 +42,28 @@ export default class Hero {
         return this.sgo
     }
 
+    /**
+     * This set the state of the hero. Set this will make the hero change state
+     */
     set climb(val: boolean) {
         this.allowClimb = val;
     }
 
     get climb() {
         return this.allowClimb;
+    }
+
+    /**
+     * This set the state of the hero. Set this will make the hero change state
+     */
+    public setSwing(val: boolean, x: number, y: number) {
+        this.allowSwing = val;
+        this.swing.objX = x;
+        this.swing.objY = y;
+    }
+
+    get isSwing() {
+        return this.allowSwing;
     }
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, anim: string, loop = false) {
@@ -76,6 +95,7 @@ export default class Hero {
 
 
     ///////////////////////////////
+    //#region privatemethod
     private initSprite() {
         // variables
         this.marioSize = this.currentScene.registry.get('marioSize');
@@ -93,6 +113,9 @@ export default class Hero {
         this.isFlying = false;
         this.isClimbing = false;
         this.allowClimb = false;
+
+        this.allowSwing = false;
+        this.swing = { isSwinging: false, objX: 0, objY: 0 }
 
         // sprite
         // this.sgo.setOrigin(0.5, 0.5);
@@ -120,17 +143,24 @@ export default class Hero {
     }
 
     update(): void {
-        console.log(this.spine.body.velocity, this.spine.body.acceleration)
+        // console.log(this.spine.body.velocity, this.spine.body.acceleration)
         if (!this.isDying) {
-            if (this.spine.body.touching.none) {
+            // console.log(this.spine.body.wasTouching.none ? 'notouch' : 'touch', this.spine.body.touching.none ? 'notouch' : 'touch', this.spine.body.touching.up, this.spine.body.touching.down, this.spine.body.touching.left, this.spine.body.touching.right)
+            if (!this.spine.body.embedded) {
+                // console.log(this.spine.body.width, this.spine.body.height)
                 // out of the ladder
                 this.allowClimb = false;
                 this.isClimbing = false;
+
+                if (this.allowSwing)
+                    this.sgo.body.setAllowGravity(true);
+                this.allowSwing = false;
+                this.swing.isSwinging = false;
                 this.spine.body.setAccelerationY(0)
-                console.log('out of the ladder');
+                // console.log('out of the ladder');
             }
 
-            if (this.keys.get('FLY').isDown && !this.allowClimb) {
+            if (this.keys.get('FLY').isDown && !this.allowClimb && !this.allowSwing) {
                 this.keys.get('FLY').isDown = false;
                 if (this.sgo.body.allowGravity === false) {
                     this.sgo.body.setAllowGravity(true);
@@ -139,6 +169,13 @@ export default class Hero {
                     this.sgo.play('fly', false);
                     this.sgo.y -= this.scene.sys.canvas.height / 50;
                 }
+            } else if (this.allowSwing) {
+                this.sgo.body.setAllowGravity(false);
+                if (Math.abs(this.sgo.y - this.sgo.displayHeight - this.swing.objY) < 5) {
+                    console.log(this.sgo.y - this.sgo.displayHeight - this.swing.objY)
+                    this.sgo.body.setVelocityY(0);
+                    this.sgo.body.setAccelerationY(0);
+                }
             }
 
             if (this.sgo.body.allowGravity) {
@@ -146,13 +183,24 @@ export default class Hero {
                 if (this.allowClimb) {
                     this.isRunning = false;
                     this.isSitting = false;
+                    this.swing.isSwinging = false;
                     this.handleClimb();
                     this.handleClimbAnimations();
-                } else
+                } else {
                     this.handleGroundAnimations();
+                }
             } else {
-                this.handleAirInput();
-                this.handleAirAnimations();
+                if (this.allowSwing) {
+                    this.isRunning = false;
+                    this.isSitting = false;
+                    this.isClimbing = false;
+                    this.handleSwing();
+                    this.handleSwingAnimations();
+                }
+                else {
+                    this.handleAirInput();
+                    this.handleAirAnimations();
+                }
             }
         } else {
             // this.sgo.setFrame(12);
@@ -173,6 +221,8 @@ export default class Hero {
             }
         }
     }
+
+    //#region ground method
 
     private handleInput() {
         if (this.spine.y > this.currentScene.sys.canvas.height) {
@@ -209,7 +259,7 @@ export default class Hero {
                 this.offsetX = this.sgo.width;
                 this.offsetY = 0;
                 this.sgo.body.setOffset(this.offsetX, this.offsetY);
-                console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
+                // console.log(this.sgo.x, this.sgo.displayWidth, this.sgo.width, this.sgo.width * 0.5, this.sgo.scaleX, this.sgo.scaleY)
             }
         } else if (this.keys.get('DOWN').isDown) {
             this.sgo.body.setVelocityY(this.acceleration);
@@ -227,6 +277,99 @@ export default class Hero {
         }
     }
 
+    private handleGroundAnimations(): void {
+        if (this.sgo.getCurrentAnimation().name === 'idle')
+            this.sgo.refresh();
+        if (this.sgo.body.velocity.y !== 0) {
+            // mario is jumping or falling
+            if (this.keys.get('DOWN').isDown && !this.isSitting) {
+                this.sgo.play('sit', false);
+                this.sgo.body.setSize(this.sgo.width, this.sgo.height / 1.5);
+                if (this.sgo.scaleX > 0) {
+                    this.offsetX = 0;
+                } else {
+                    this.offsetX = this.sgo.width;
+                }
+                this.offsetY = this.sgo.height - this.sgo.height / 1.5;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
+                this.isRunning = false;
+                this.isSitting = true;
+                // console.log('sit')
+            }
+            else if (!this.isSitting) {
+                this.sgo.play('idle', true);
+                this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+                if (this.sgo.scaleX > 0) {
+                    this.offsetX = 0;
+                } else {
+                    this.offsetX = this.sgo.width;
+                }
+                this.offsetY = 0;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
+                this.isRunning = false;
+                // this.isSitting = false;
+            }
+            if (this.marioSize === 'small') {
+                // this.sgo.setFrame(4);
+            } else {
+                // this.sgo.setFrame(10);
+            }
+        } else if (this.sgo.body.velocity.x !== 0) {
+            // mario is moving horizontal
+
+            // check if mario is making a quick direction change
+            if (
+                (this.sgo.body.velocity.x < 0 && this.sgo.body.acceleration.x > 0) ||
+                (this.sgo.body.velocity.x > 0 && this.sgo.body.acceleration.x < 0)
+            ) {
+                if (this.marioSize === 'small') {
+                    // this.sgo.setFrame(5);
+                } else {
+                    // this.sgo.setFrame(11);
+                }
+            }
+
+            if (Math.abs(this.sgo.body.velocity.x) > 0.05 && !this.isRunning) {
+                this.isRunning = true;
+                this.isSitting = false;
+                this.sgo.play('run', true);
+                // console.log('runaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+                // this.sgo.body.setOffset(0, 0);
+            }
+            else if (Math.abs(this.sgo.body.velocity.x) <= 0.05) {
+                this.isRunning = false;
+            }
+            // else {
+            //     this.sgo.play('run', true);
+            // }
+        } else {
+            // mario is standing still
+            this.sgo.play('idle', true);
+            this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+            if (this.sgo.scaleX > 0) {
+                this.offsetX = 0;
+            } else {
+                this.offsetX = this.sgo.width;
+            }
+            this.offsetY = 0;
+            this.sgo.body.setOffset(this.offsetX, this.offsetY);
+            this.isRunning = false;
+            this.isSitting = false;
+            if (this.marioSize === 'small') {
+                // this.sgo.setFrame(0);
+            } else {
+                if (this.keys.get('DOWN').isDown) {
+                    // this.sgo.setFrame(13);
+                } else {
+                    // this.sgo.setFrame(6);
+                }
+            }
+        }
+    }
+    //#endregion
+
+    //#region air method
     private handleAirInput() {
         if (this.spine.y > this.currentScene.sys.canvas.height) {
             // mario fell into a hole
@@ -276,100 +419,13 @@ export default class Hero {
             this.offsetX = this.sgo.width;
         }
         // this.offsetY = this.sgo.height / 1.5;
-        console.log(this.sgo.width, this.sgo.height)
+        // console.log(this.sgo.width, this.sgo.height)
         this.sgo.body.setOffset(this.offsetX, this.offsetY);
     }
 
-    private handleGroundAnimations(): void {
-        if (this.sgo.getCurrentAnimation().name === 'idle')
-            this.sgo.refresh();
-        if (this.sgo.body.velocity.y !== 0) {
-            // mario is jumping or falling
-            if (this.keys.get('DOWN').isDown && !this.isSitting) {
-                this.sgo.play('sit', false);
-                this.sgo.body.setSize(this.sgo.width, this.sgo.height / 1.5);
-                if (this.sgo.scaleX > 0) {
-                    this.offsetX = 0;
-                } else {
-                    this.offsetX = this.sgo.width;
-                }
-                this.offsetY = this.sgo.height - this.sgo.height / 1.5;
-                this.sgo.body.setOffset(this.offsetX, this.offsetY);
-                this.isRunning = false;
-                this.isSitting = true;
-                console.log('sit')
-            }
-            else if (!this.isSitting) {
-                this.sgo.play('idle', true);
-                this.sgo.body.setSize(this.sgo.width, this.sgo.height);
-                if (this.sgo.scaleX > 0) {
-                    this.offsetX = 0;
-                } else {
-                    this.offsetX = this.sgo.width;
-                }
-                this.offsetY = 0;
-                this.sgo.body.setOffset(this.offsetX, this.offsetY);
-                this.isRunning = false;
-                // this.isSitting = false;
-            }
-            if (this.marioSize === 'small') {
-                // this.sgo.setFrame(4);
-            } else {
-                // this.sgo.setFrame(10);
-            }
-        } else if (this.sgo.body.velocity.x !== 0) {
-            // mario is moving horizontal
+    //#endregion
 
-            // check if mario is making a quick direction change
-            if (
-                (this.sgo.body.velocity.x < 0 && this.sgo.body.acceleration.x > 0) ||
-                (this.sgo.body.velocity.x > 0 && this.sgo.body.acceleration.x < 0)
-            ) {
-                if (this.marioSize === 'small') {
-                    // this.sgo.setFrame(5);
-                } else {
-                    // this.sgo.setFrame(11);
-                }
-            }
-
-            if (Math.abs(this.sgo.body.velocity.x) > 0.05 && !this.isRunning) {
-                this.isRunning = true;
-                this.isSitting = false;
-                this.sgo.play('run', true);
-                console.log('runaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                this.sgo.body.setSize(this.sgo.width, this.sgo.height);
-                // this.sgo.body.setOffset(0, 0);
-            }
-            else if (Math.abs(this.sgo.body.velocity.x) <= 0.05) {
-                this.isRunning = false;
-            }
-            // else {
-            //     this.sgo.play('run', true);
-            // }
-        } else {
-            // mario is standing still
-            this.sgo.play('idle', true);
-            this.sgo.body.setSize(this.sgo.width, this.sgo.height);
-            if (this.sgo.scaleX > 0) {
-                this.offsetX = 0;
-            } else {
-                this.offsetX = this.sgo.width;
-            }
-            this.offsetY = 0;
-            this.sgo.body.setOffset(this.offsetX, this.offsetY);
-            this.isRunning = false;
-            this.isSitting = false;
-            if (this.marioSize === 'small') {
-                // this.sgo.setFrame(0);
-            } else {
-                if (this.keys.get('DOWN').isDown) {
-                    // this.sgo.setFrame(13);
-                } else {
-                    // this.sgo.setFrame(6);
-                }
-            }
-        }
-    }
+    //#region  climb method
 
     private handleClimb() {
         if (this.spine.y > this.currentScene.sys.canvas.height) {
@@ -388,11 +444,11 @@ export default class Hero {
         } else if (this.keys.get('RIGHT').isDown) {
             // use ground method
         }
-        else {
+        // else {
 
-            this.sgo.body.setVelocityY(0);
-            this.sgo.body.setAccelerationY(0);
-        }
+        //     this.sgo.body.setVelocityY(0);
+        //     this.sgo.body.setAccelerationY(0);
+        // }
     }
 
     private handleClimbAnimations() {
@@ -400,6 +456,60 @@ export default class Hero {
             this.sgo.play('climb', true);
             // this.sgo.state.timeScale = 0;
             this.isClimbing = true;
+            this.sgo.refresh();
+        }
+        this.sgo.body.setSize(this.sgo.width, this.sgo.height);
+        if (this.sgo.scaleX > 0) {
+            this.offsetX = 0;
+        } else {
+            this.offsetX = this.sgo.width;
+        }
+        this.sgo.body.setOffset(this.offsetX, this.offsetY);
+    }
+
+    //#endregion
+
+    //#region swing method
+
+    private handleSwing() {
+        // console.log(this.sgo.body.allowGravity)
+        if (this.spine.y > this.currentScene.sys.canvas.height) {
+            // mario fell into a hole
+            this.isDying = true;
+        }
+
+        if (this.keys.get('RIGHT').isDown) {
+            this.sgo.body.setAccelerationX(this.acceleration);
+            if (this.sgo.scaleX < 0) {    // if not have if, body will fluctuate
+                this.sgo.setScale(this.scale, this.scale); // this.sgo.setFlipX(false);
+                this.offsetX = 0;
+                this.offsetY = 0;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
+            }
+        } else if (this.keys.get('LEFT').isDown) {
+            this.sgo.body.setAccelerationX(-this.acceleration);
+            // this.sgo.setFlipX(true);
+            if (this.sgo.scaleX > 0) {
+                this.sgo.setScale(-this.scale, this.scale); // this.sgo.setFlipX(true);
+                // this.sgo.setSize(this.sgo.width, this.sgo.height);
+                this.offsetX = this.sgo.width;
+                this.offsetY = 0;
+                this.sgo.body.setOffset(this.offsetX, this.offsetY);
+            }
+        }
+        else {
+            this.sgo.body.setVelocityX(0);
+            this.sgo.body.setAccelerationX(0);
+
+            // this.sgo.body.setVelocityY(0);
+            // this.sgo.body.setAccelerationY(0);
+        }
+    }
+    private handleSwingAnimations() {
+        if (!this.swing.isSwinging) {
+            this.sgo.play('swing', true);
+            // this.sgo.state.timeScale = 0;
+            this.swing.isSwinging = true;
         }
         this.sgo.refresh();
         this.sgo.body.setSize(this.sgo.width, this.sgo.height);
@@ -411,11 +521,7 @@ export default class Hero {
         this.sgo.body.setOffset(this.offsetX, this.offsetY);
     }
 
-    public growMario(): void {
-        this.marioSize = 'big';
-        this.currentScene.registry.set('marioSize', 'big');
-        this.adjustPhysicBodyToBigSize();
-    }
+    //#endregion
 
     private shrinkMario(): void {
         this.marioSize = 'small';
@@ -449,6 +555,14 @@ export default class Hero {
             // this.sgo.body.setSize(1, 1);
             this.sgo.body.setOffset(this.sgo.width, 0);
         }
+    }
+
+    //#endregion
+
+    public growMario(): void {
+        this.marioSize = 'big';
+        this.currentScene.registry.set('marioSize', 'big');
+        this.adjustPhysicBodyToBigSize();
     }
 
     public bounceUpAfterHitEnemyOnHead(): void {
