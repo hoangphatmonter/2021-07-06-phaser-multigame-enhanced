@@ -15,6 +15,8 @@
   - ~~`this.children.depthSort()`: sort the display list to rearrange the order after `setDepth`~~ : it just sort the display list
 - [body.touching](https://phaser.discourse.group/t/correct-usage-of-body-touching/1758): body.touching is something wrong in spine
 - body.embedded
+- When inherit graphics:
+  - x,y parameter in the `super()` method will set that position to be the origin of this graphics for all `fill()` method
 - [on exit overlap](https://github.com/photonstorm/phaser/issues/1566) (not used)
 # References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)

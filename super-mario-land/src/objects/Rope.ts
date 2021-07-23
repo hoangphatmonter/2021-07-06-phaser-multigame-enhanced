@@ -6,15 +6,16 @@ export class Rope extends Phaser.GameObjects.Graphics {
   // variables
 
   constructor(aParams: IPlatformConstructor, w: number, h: number) {
-    super(aParams.scene, { x: aParams.x, y: aParams.y });
+    super(aParams.scene, { x: aParams.x, y: aParams.y }); // x, y : will set the (0,0) of this graphics
+    // super(aParams.scene);
 
     this.fillStyle(0xffff00, 1);
-    this.fillRect(aParams.x, aParams.y, w, h);
-    this.initImage(w, h);
+    this.fillRect(0, 0, w, h);
+    this.initImage(w, h, aParams.x, aParams.y);
     this.scene.add.existing(this);
   }
 
-  private initImage(w: number, h: number): void {
+  private initImage(w: number, h: number, x: number, y: number): void {
     // image
     // this.displayOriginX = 0;
     // this.displayOriginY = 0;
