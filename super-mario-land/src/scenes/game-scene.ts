@@ -533,9 +533,11 @@ export class GameScene extends Phaser.Scene {
   private handlePlayerInRopes(player: Mario, rope: Rope): void {
     if (!this.player.climb)
       this.player.climb = true;
+    this.player.overlap = true;
   }
   private handlePlayerInHorizonRopes(player: Mario, rope: Rope): void {
     if (!this.player.isSwing)
       this.player.setSwing(true, rope.x, rope.y);
+    this.player.overlap = true;
   }
 }

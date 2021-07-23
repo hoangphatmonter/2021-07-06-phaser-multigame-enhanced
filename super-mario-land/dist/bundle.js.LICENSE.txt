@@ -1,3 +1,5 @@
+/*!this.spine.body.embedded*/
+
 /**
  * @author       Florian Vazelle
  * @author       Geoffrey Glaive

@@ -19,3 +19,4 @@
 # References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)
 - [Spine expample Phaser 3](https://labs.phaser.io/index.html?dir=spine/&q=)
+- [Handle exit overlap](https://www.html5gamedevs.com/topic/17601-check-end-of-overlapcollision/)

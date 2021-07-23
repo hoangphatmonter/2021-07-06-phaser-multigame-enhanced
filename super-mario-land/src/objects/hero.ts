@@ -26,6 +26,7 @@ export default class Hero {
 
     private allowSwing: boolean;
     private swing: { isSwinging: boolean, objX: number, objY: number }
+    private isOverlap: boolean;
 
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>;
@@ -64,6 +65,10 @@ export default class Hero {
 
     get isSwing() {
         return this.allowSwing;
+    }
+
+    set overlap(val: boolean) {
+        this.isOverlap = val;
     }
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, anim: string, loop = false) {
@@ -116,6 +121,7 @@ export default class Hero {
 
         this.allowSwing = false;
         this.swing = { isSwinging: false, objX: 0, objY: 0 }
+        this.isOverlap = false;
 
         // sprite
         // this.sgo.setOrigin(0.5, 0.5);
@@ -146,7 +152,8 @@ export default class Hero {
         // console.log(this.spine.body.velocity, this.spine.body.acceleration)
         if (!this.isDying) {
             // console.log(this.spine.body.wasTouching.none ? 'notouch' : 'touch', this.spine.body.touching.none ? 'notouch' : 'touch', this.spine.body.touching.up, this.spine.body.touching.down, this.spine.body.touching.left, this.spine.body.touching.right)
-            if (!this.spine.body.embedded) {
+            console.log(this.isOverlap)
+            if (!this.isOverlap/*!this.spine.body.embedded*/) {
                 // console.log(this.spine.body.width, this.spine.body.height)
                 // out of the ladder
                 this.allowClimb = false;
@@ -220,6 +227,9 @@ export default class Hero {
                 this.isVulnerable = true;
             }
         }
+
+        // reset variable
+        this.isOverlap = false;
     }
 
     //#region ground method
@@ -444,11 +454,11 @@ export default class Hero {
         } else if (this.keys.get('RIGHT').isDown) {
             // use ground method
         }
-        // else {
+        else {
 
-        //     this.sgo.body.setVelocityY(0);
-        //     this.sgo.body.setAccelerationY(0);
-        // }
+            this.sgo.body.setVelocityY(0);
+            this.sgo.body.setAccelerationY(0);
+        }
     }
 
     private handleClimbAnimations() {
