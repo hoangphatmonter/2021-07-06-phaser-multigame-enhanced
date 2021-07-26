@@ -29,6 +29,7 @@ export class GameScene extends Phaser.Scene {
   preload(): void {
     this.load.image('crystal', './assets/images/crystal.png');
     this.load.image('apple', './assets/images/apple.png');
+    this.load.atlas('flares', 'assets/particles/flares.png', 'assets/particles/flares.json');
   }
 
   init(): void {
@@ -51,6 +52,39 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
+    // add particle
+    if (this.wonderfulCount !== 0) {
+      var logoSource = {
+        getRandomPoint: (vec: any) => {
+          var x = Phaser.Math.Between(0, this.wonderfulText.width - 1);
+          var y = Phaser.Math.Between(0, this.wonderfulText.height - 1);
+
+          return vec.setTo(x + this.wonderfulText.getTopLeft().x, y + this.wonderfulText.getTopLeft().y);
+        }
+      };
+
+      let frameColor: string = 'white';
+      if (this.wonderfulCount <= 5 && this.wonderfulCount > 1)
+        frameColor = 'green';
+      else if (this.wonderfulCount <= 10)
+        frameColor = 'blue';
+      else if (this.wonderfulCount <= 20)
+        frameColor = 'red';
+      else if (this.wonderfulCount > 20)
+        frameColor = 'yellow';
+
+      this.add.particles('flares').createEmitter({
+        frame: frameColor,
+        x: 0,
+        y: 0,
+        lifespan: 1000,
+        gravityY: 10,
+        scale: { start: 0, end: 0.25, ease: 'Quad.easeOut' },
+        alpha: { start: 1, end: 0, ease: 'Quad.easeIn' },
+        blendMode: 'ADD',
+        emitZone: { type: 'random', source: logoSource }
+      });
+    }
     // create game objects
     switch (this.nextElement) {
       case ObjTypes.APPLE:
@@ -89,6 +123,16 @@ export class GameScene extends Phaser.Scene {
         console.log('ctystal');
         break;
     }
+
+    this.tweens.add({
+      targets: [this.cloneCrystal, this.originalCrystal],
+      angle: 360,
+      _ease: 'Sine.easeInOut',
+      ease: 'Power2',
+      duration: 1000,
+      onStart: () => { this.input.mouse.enabled = false },
+      onComplete: () => { this.input.mouse.enabled = true }
+    })
 
     this.input.on(
       'pointerdown',

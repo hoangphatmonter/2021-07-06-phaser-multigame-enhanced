@@ -18,7 +18,12 @@
 - When inherit graphics:
   - x,y parameter in the `super()` method will set that position to be the origin of this graphics for all `fill()` method
 - [on exit overlap](https://github.com/photonstorm/phaser/issues/1566) (not used)
-# References
+# Alpha-adjust
+- not add particles in `init()`: will make exception
+
+## References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)
 - [Spine expample Phaser 3](https://labs.phaser.io/index.html?dir=spine/&q=)
 - [Handle exit overlap](https://www.html5gamedevs.com/topic/17601-check-end-of-overlapcollision/)
+# Alpha-adjust
+- [tween](https://phaser.io/examples/v3/view/tweens/checkerboard-3#)
