@@ -27,6 +27,10 @@ export class MainMenuScene extends Phaser.Scene {
       './assets/font/pcsenior.png',
       './assets/font/pcsenior.fnt'
     );
+    this.load.spritesheet('fullplayer', './assets/images/player.png', {
+      frameWidth: 32,
+      frameHeight: 8
+    });
   }
 
   create(): void {
@@ -58,6 +62,26 @@ export class MainMenuScene extends Phaser.Scene {
         16
       )
     );
+    this.tweens.add({
+      targets: this.bitmapTexts,
+      duration: 100,
+      repeat: -1,
+      alpha: 0.5,
+      yoyo: true
+    })
+
+    var offscreen = new Phaser.Geom.Rectangle(-256, 0, 256, 224);
+    var screen = new Phaser.Geom.Rectangle(-256, 0, 656, 224);
+
+    this.add.particles('fullplayer',
+      {
+        emitZone: { source: offscreen },
+        deathZone: { source: screen, type: 'onLeave' },
+        frequency: 500,
+        speedX: { min: 80, max: 120 },
+        lifespan: 30000,
+        scale: 1
+      }).setDepth(-10);
   }
 
   update(): void {

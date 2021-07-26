@@ -132,6 +132,8 @@ export class GameScene extends Phaser.Scene {
       }
 
       this.scoreText.setText(CONST.P1_SCORE + ' : ' + CONST.P2_SCORE);
+
+
       if (CONST.P1_SCORE === 6 || CONST.P2_SCORE === 6) {
         this.scene.start('MainMenuScene');
       } else {
