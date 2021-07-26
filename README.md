@@ -27,3 +27,4 @@
 - [Handle exit overlap](https://www.html5gamedevs.com/topic/17601-check-end-of-overlapcollision/)
 # Alpha-adjust
 - [tween](https://phaser.io/examples/v3/view/tweens/checkerboard-3#)
+- [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emit%20from%20texture.js)

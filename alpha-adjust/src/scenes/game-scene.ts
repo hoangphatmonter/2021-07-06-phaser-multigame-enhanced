@@ -82,7 +82,8 @@ export class GameScene extends Phaser.Scene {
         scale: { start: 0, end: 0.25, ease: 'Quad.easeOut' },
         alpha: { start: 1, end: 0, ease: 'Quad.easeIn' },
         blendMode: 'ADD',
-        emitZone: { type: 'random', source: logoSource }
+        emitZone: { type: 'random', source: logoSource },
+        quantity: 5
       });
     }
     // create game objects
