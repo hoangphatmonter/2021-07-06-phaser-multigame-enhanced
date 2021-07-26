@@ -28,3 +28,5 @@
 # Alpha-adjust
 - [tween](https://phaser.io/examples/v3/view/tweens/checkerboard-3#)
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emit%20from%20texture.js)
+# Asteroid
+- [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\explode%20test.js)

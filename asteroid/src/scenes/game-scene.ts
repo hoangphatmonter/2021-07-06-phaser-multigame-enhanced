@@ -11,6 +11,8 @@ export class GameScene extends Phaser.Scene {
   private bitmapTexts: Phaser.GameObjects.BitmapText[];
   private gotHit: boolean;
 
+  private emitter0: Phaser.GameObjects.Particles.ParticleEmitter;
+
   constructor() {
     super({
       key: 'GameScene'
@@ -43,6 +45,19 @@ export class GameScene extends Phaser.Scene {
         60
       )
     );
+
+    // create particles
+    this.emitter0 = this.add.particles('spark0').createEmitter({
+      x: 400,
+      y: 300,
+      speed: { min: -800, max: 800 },
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.5, end: 0 },
+      blendMode: 'SCREEN',
+      active: false,
+      lifespan: 600,
+      gravityY: 800,
+    });
   }
 
   update(): void {
@@ -65,13 +80,26 @@ export class GameScene extends Phaser.Scene {
       this.asteroids[i].update();
 
       if (!this.asteroids[i].active) {
+        this.emitter0.active = true;
+        this.emitter0.explode(10, this.asteroids[i].x, this.asteroids[i].y);
+
         this.spawnAsteroids(
           3,
           this.asteroids[i].getSize() - 1,
           this.asteroids[i].x,
           this.asteroids[i].y
         );
-        this.asteroids[i].destroy();
+
+        let cur = this.asteroids[i]
+
+        this.tweens.add({
+          targets: cur,
+          alpha: 0,
+          duration: 1000,
+          onComplete: () => { cur.destroy() }
+        });
+
+        // this.asteroids[i].destroy();
         this.asteroids.splice(i, 1);
       }
     }

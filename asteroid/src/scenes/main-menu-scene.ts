@@ -29,6 +29,7 @@ export class MainMenuScene extends Phaser.Scene {
       './assets/font/asteroidFont.png',
       './assets/font/asteroidFont.fnt'
     );
+    this.load.image('spark0', 'assets/particles/blue.png')
   }
 
   create(): void {
