@@ -44,3 +44,5 @@
 
 ## Coin-runner
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\random%20emit%20zone%20custom.js)
+## Flappy birds
+- [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\follow%20sprite.js)
