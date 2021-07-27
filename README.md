@@ -41,3 +41,6 @@
 ## Candy-crush
 - [tween](https://labs.phaser.io/edit.html?src=src\tweens\delay.js)
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emitter%20bounds.js)
+
+## Coin-runner
+- [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\random%20emit%20zone%20custom.js)

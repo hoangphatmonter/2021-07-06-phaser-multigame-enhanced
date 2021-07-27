@@ -22,6 +22,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('player', './assets/images/player.png');
     this.load.image('coin', './assets/images/coin.png');
     this.load.image('apple', './assets/images/apple.png');
+    this.load.atlas('flares', 'assets/particles/flares.png', 'assets/particles/flares.json');
   }
 
   init(): void {
@@ -97,8 +98,16 @@ export class GameScene extends Phaser.Scene {
         )
       ) {
         this.buyApple();
-        this.apples[i].destroy();
+        let apple = this.apples[i];
         this.apples.splice(i, 1);
+        this.add.tween({
+          targets: apple,
+          alpha: 0,
+          rotation: 360,
+          y: apple.y - 10,
+          onComplete: () => { apple.destroy() }
+        })
+
         i--;
       }
     }
