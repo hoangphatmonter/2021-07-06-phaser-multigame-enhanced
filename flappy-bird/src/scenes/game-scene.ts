@@ -73,6 +73,14 @@ export class GameScene extends Phaser.Scene {
         (bird: Bird, coin: Coin) => {
           console.log('alo')
           this.registry.values.score += 10;
+          this.add.tween({
+            targets: this.scoreText,
+            alpha: 0,
+            yoyo: true,
+            duration: 100,
+            repeat: 3
+          })
+          coin.destroyParticle();
           coin.destroy();
         },
         null,
@@ -104,6 +112,15 @@ export class GameScene extends Phaser.Scene {
     // update the score
     this.registry.values.score += 1;
     this.scoreText.setText(this.registry.values.score);
+    if (this.registry.values.score !== 0 && this.registry.values.score % 5 === 0) {
+      this.add.tween({
+        targets: this.scoreText,
+        alpha: 0,
+        yoyo: true,
+        duration: 100,
+        repeat: 3
+      })
+    }
 
     // randomly pick a number between 1 and 5
     let hole = Math.floor(Math.random() * 5) + 1;
