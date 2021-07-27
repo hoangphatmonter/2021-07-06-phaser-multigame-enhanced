@@ -11,6 +11,8 @@ export class GameScene extends Phaser.Scene {
   // Selected Tiles
   private firstSelectedTile: Tile;
   private secondSelectedTile: Tile;
+  private particle: Phaser.GameObjects.Particles.ParticleEmitterManager;
+  private particleEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor() {
     super({
@@ -19,6 +21,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   init(): void {
+    this.particle = this.add.particles('flares');
     // Init variables
     this.canMove = true;
 
@@ -76,7 +79,19 @@ export class GameScene extends Phaser.Scene {
     if (this.canMove) {
       if (!this.firstSelectedTile) {
         this.firstSelectedTile = gameobject;
+
+        let rect = new Phaser.Geom.Rectangle(gameobject.x, gameobject.y, gameobject.width, gameobject.height);
+        this.particleEmitter = this.particle.createEmitter({
+          frame: 'red',
+          lifespan: 1000,
+          scale: { start: 0.2, end: 0 },
+          emitZone: { source: rect, type: 'edge', quantity: 50 },
+          active: true
+        })
       } else {
+        this.particleEmitter.active = false;
+        this.particleEmitter.killAll();
+        this.particle.removeEmitter(this.particleEmitter);
         // So if we are here, we must have selected a second tile
         this.secondSelectedTile = gameobject;
 
@@ -167,6 +182,70 @@ export class GameScene extends Phaser.Scene {
         totalPoints += match.length;
       });
       this.events.emit('pointsChanged', totalPoints);
+
+      // var codeRain = {
+      //   width: 50,
+      //   height: 40,
+      //   cellWidth: 16,
+      //   cellHeight: 16,
+      //   getPoints: function (quantity: any) {
+      //     var cols = (new Array(codeRain.width)).fill(0);
+      //     var lastCol = cols.length - 1;
+      //     var Between = Phaser.Math.Between;
+      //     var RND = Phaser.Math.RND;
+      //     var points = [];
+
+      //     for (var i = 0; i < quantity; i++) {
+      //       var col = Between(0, lastCol);
+      //       var row = (cols[col] += 1);
+
+      //       if (RND.frac() < 0.01) {
+      //         row *= RND.frac();
+      //       }
+
+      //       row %= codeRain.height;
+      //       row |= 0;
+
+      //       points[i] = new Phaser.Math.Vector2(16 * col, 16 * row);
+      //     }
+
+      //     return points;
+      //   }
+      // };
+      // this.add.particles('font').createEmitter({
+      //   alpha: { start: 1, end: 0.25, ease: 'Expo.easeOut' },
+      //   angle: 0,
+      //   blendMode: 'ADD',
+      //   emitZone: { source: codeRain, type: 'edge', quantity: 2000 },
+      //   frame: Phaser.Utils.Array.NumberArray(8, 58),
+      //   frequency: 100,
+      //   lifespan: 6000,
+      //   quantity: 25,
+      //   scale: -0.5,
+      //   tint: 0x0066ff00
+      // });
+      let text = this.add.text(matches[0][0].x, matches[0][0].y, `+${totalPoints}`, { fontSize: '30px', color: '#111111', fontStyle: 'bold' }).setDepth(30);
+      this.tweens.add({
+        targets: text,
+        y: matches[0][0].y - 10,
+        alpha: 0,
+        ease: 'Power1',
+        duration: 3000,
+        onComplete: () => { text.destroy() }
+      });
+      // this.add.particles('font').createEmitter({
+      //   frame: [11, 16 + totalPoints],
+      //   alpha: { start: 1, end: 0, ease: 'Expo.easeOut' },
+      //   blendMode: 'ADD',
+      //   x: matches[0][0].x,
+      //   y: matches[0][0].y,
+      //   moveToX: matches[0][0].x,
+      //   moveToY: matches[0][0].y - 10,
+      //   lifespan: 2000,
+      //   quantity: 1,
+      //   maxParticles: 2
+      // });
+
       //Remove the tiles
       this.removeTileGroup(matches);
       // Move the tiles currently on the board into their new positions

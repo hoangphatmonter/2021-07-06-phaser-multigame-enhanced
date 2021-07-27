@@ -21,6 +21,9 @@
 ## Alpha-adjust
 - not add particles in `init()`: will make exception
 
+## Candy-crush
+- [How to delete completely particle emitter from scene](https://www.html5gamedevs.com/topic/36961-how-to-destroy-particle-emitter/)
+
 # References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)
 - [Spine expample Phaser 3](https://labs.phaser.io/index.html?dir=spine/&q=)
@@ -34,4 +37,7 @@
 - [tween](https://youtu.be/VOtZ6yNqH84?t=4419)
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\parallax.js)
 ## Block
+- [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emitter%20bounds.js)
+## Candy-crush
+- [tween](https://labs.phaser.io/edit.html?src=src\tweens\delay.js)
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emitter%20bounds.js)
