@@ -51,7 +51,7 @@ export class HUDScene extends Phaser.Scene {
         this.points += number;
         // this.texts[2].setText(`Points: ${this.registry.get('points')}`);
         this.statTexts[0].setText(`Points: ${this.points}`);
-        console.log(this.points);
+        // console.log(this.points);
     }
     private showVictory() {
         this.statTexts[1].setVisible(true);

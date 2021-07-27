@@ -1,6 +1,6 @@
 # Assets
 - [Mario](https://dotstudio.itch.io/super-mario-1-remade-assets)
-## Note
+# Note
 - [Declaration Merging typescript](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
 - [spine arcade physics container](https://blog.ourcade.co/posts/2020/simple-phaser-3-spine-arcade-physics-container/)
 - [~~extending spine gameobject~~](https://phaser.discourse.group/t/extending-spinegameobject/8580/3)
@@ -18,18 +18,20 @@
 - When inherit graphics:
   - x,y parameter in the `super()` method will set that position to be the origin of this graphics for all `fill()` method
 - [on exit overlap](https://github.com/photonstorm/phaser/issues/1566) (not used)
-# Alpha-adjust
+## Alpha-adjust
 - not add particles in `init()`: will make exception
 
-## References
+# References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)
 - [Spine expample Phaser 3](https://labs.phaser.io/index.html?dir=spine/&q=)
 - [Handle exit overlap](https://www.html5gamedevs.com/topic/17601-check-end-of-overlapcollision/)
-# Alpha-adjust
+## Alpha-adjust
 - [tween](https://phaser.io/examples/v3/view/tweens/checkerboard-3#)
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emit%20from%20texture.js)
-# Asteroid
+## Asteroid
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\explode%20test.js)
-# Blckade
+## Blckade
 - [tween](https://youtu.be/VOtZ6yNqH84?t=4419)
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\parallax.js)
+## Block
+- [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\emitter%20bounds.js)

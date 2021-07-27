@@ -4,6 +4,8 @@ export class Block extends Phaser.GameObjects.Sprite {
   private blockType: number;
   private isDying: boolean;
 
+  private tween: Phaser.Tweens.Tween;
+
   constructor(aParams: IBlockConstructor) {
     super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.type);
 
@@ -12,6 +14,20 @@ export class Block extends Phaser.GameObjects.Sprite {
 
     this.initSprite();
     this.scene.add.existing(this);
+    if (this.blockType === 1)
+      this.tween = this.scene.add.tween({
+        targets: this,
+        scaleX: 1,
+        scaleY: 1,
+        angle: 360,
+        // _ease: 'Sine.easeInOut',
+        // ease: 'Power2',
+        duration: 1000,
+        repeat: -1,
+        yoyo: true,
+        hold: 1000,
+        repeatDelay: 3000
+      })
   }
 
   update(): void {

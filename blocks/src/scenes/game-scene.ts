@@ -85,6 +85,8 @@ export class GameScene extends Phaser.Scene {
     this.checkVictory();
 
     this.handleInput();
+
+    this.cursor.update();
   }
 
   private handleInput(): void {
