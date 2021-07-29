@@ -24,6 +24,9 @@
 ## Candy-crush
 - [How to delete completely particle emitter from scene](https://www.html5gamedevs.com/topic/36961-how-to-destroy-particle-emitter/)
 
+## Snake
+- [How to stop particle spawn](https://phaser.discourse.group/t/infinite-particles/3065/2)
+
 # References
 - [Add Spine Plugin](https://blog.ourcade.co/posts/2020/phaser-3-parcel-typescript-spine/)
 - [Spine expample Phaser 3](https://labs.phaser.io/index.html?dir=spine/&q=)
@@ -46,3 +49,7 @@
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\random%20emit%20zone%20custom.js)
 ## Flappy birds
 - [particles](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\follow%20sprite.js)
+## Snake
+- [tween](https://labs.phaser.io/edit.html?src=src\tweens\stagger%20compare.js)
+- [particle](https://labs.phaser.io/edit.html?src=src\game%20objects\particle%20emitter\move%20to.js)
+- [particle](https://labs.phaser.io/edit.html?src=src/game%20objects/particle%20emitter/create%20emitter%20from%20config%203.js&v=3.55.2)

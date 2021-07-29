@@ -100,6 +100,15 @@ export class Snake {
         fillStyle: { color: 0x61e85b, alpha: 0.8 }
       })
       .fillRect(this.dotSize, this.dotSize, this.dotSize, this.dotSize);
+
+    this.scene.tweens.add({
+      targets: this.snakeBody,
+      scale: 0.8,
+      ease: 'linear',
+      duration: 100,
+      delay: this.scene.tweens.stagger(100, { ease: 'cubic.in' }),
+      yoyo: true
+    })
   }
 
   public checkSnakeSnakeCollision(): void {

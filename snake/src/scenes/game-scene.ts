@@ -23,6 +23,11 @@ export class GameScene extends Phaser.Scene {
   // texts
   private scoreText: Phaser.GameObjects.BitmapText;
 
+  private ending: boolean;
+  private particle: Phaser.GameObjects.Particles.ParticleEmitterManager;
+  private emitter: Phaser.GameObjects.Particles.ParticleEmitter[];
+  private endingScore: number;
+
   constructor() {
     super({
       key: 'GameScene'
@@ -37,6 +42,10 @@ export class GameScene extends Phaser.Scene {
     this.horizontalFields = this.boardWidth / CONST.FIELD_SIZE;
     this.verticalFields = this.boardHeight / CONST.FIELD_SIZE;
     this.tick = 0;
+
+    this.ending = false;
+    this.emitter = []
+    this.endingScore = 0;
   }
 
   create(): void {
@@ -90,7 +99,7 @@ export class GameScene extends Phaser.Scene {
     this.listWall = [];
   }
 
-  update(time: number): void {
+  update(time: number, delta: number): void {
     if (this.tick === 0) {
       this.tick = time;
     }
@@ -102,7 +111,87 @@ export class GameScene extends Phaser.Scene {
       }
       this.player.handleInput();
     } else {
-      this.scene.start('MainMenuScene');
+      if (!this.ending) {
+        let obj = {
+          getRandomPoint: (vec: any) => {
+            vec.x = this.scoreText.x;
+            vec.y = this.scoreText.y;
+            return vec;
+          }
+        }
+        this.particle = this.add.particles('flares');
+        this.emitter.push(this.particle.createEmitter({
+          frame: { frames: ['blue', 'green', 'red', 'yellow'] },
+          x: 0,
+          y: 0,
+          moveToX: this.sys.canvas.width / 9,
+          moveToY: this.sys.canvas.height,
+          lifespan: 1000,
+          scale: 0.1,
+          quantity: 1,
+          blendMode: 'ADD',
+          gravityX: 200,
+          frequency: 100,
+          emitZone: { source: obj },
+        }))
+        this.emitter.push(this.particle.createEmitter({
+          frame: { frames: ['blue', 'green', 'red', 'yellow'] },
+          x: 0,
+          y: 0,
+          moveToX: this.sys.canvas.width - this.sys.canvas.width / 10,
+          moveToY: this.sys.canvas.height,
+          lifespan: 1000,
+          scale: 0.1,
+          quantity: 1,
+          blendMode: 'ADD',
+          gravityX: -200,
+          emitZone: { source: obj },
+          frequency: 100
+        }))
+        this.emitter.push(this.particle.createEmitter({
+          frame: { frames: ['blue'] },
+          x: this.sys.canvas.width / 2,
+          y: this.sys.canvas.height - 5,
+          lifespan: 5000,
+          scale: 0.1,
+          quantity: 1,
+          // delay: 10000,
+          blendMode: 'ADD',
+          frequency: 100
+        }))
+        this.emitter.push(this.particle.createEmitter({
+          frame: 'blue',
+          x: this.sys.canvas.width / 2,
+          y: this.sys.canvas.height - 5,
+          angle: { min: 180, max: 360 },
+          speed: 400,
+          gravityY: 500,
+          lifespan: 4000,
+          quantity: 6,
+          scale: { start: 0.04, end: 0.4 },
+          blendMode: 'ADD',
+          active: false
+        }));
+        // stop go to bottom
+        this.time.delayedCall(2000, this.emitter[0].explode, [0, 0, 0], this.emitter[0]);
+        this.time.delayedCall(2000, this.emitter[1].explode, [0, 0, 0], this.emitter[1]);
+        // stop growing big cirle
+        this.time.delayedCall(5000, this.emitter[2].explode, [0, 0, 0], this.emitter[2]);
+        // start shoot particle
+        this.time.delayedCall(5000, () => { this.emitter[3].active = true }, [], this.emitter[3]);
+        // stop shoot particle
+        this.time.delayedCall(10000, this.emitter[3].explode, [0, 0, 0], this.emitter[3]);
+        // go to main menu
+        this.time.delayedCall(12000, this.scene.start, ['MainMenuScene'], this.scene);
+        // this.scene.start('MainMenuScene');
+        this.ending = true;
+      }
+      if (this.endingScore <= CONST.SCORE) {
+        this.endingScore += CONST.SCORE / 2000 * delta;
+        let showScore = Math.ceil(CONST.SCORE - this.endingScore);
+        this.scoreText.setText('' + showScore);
+      }
+
     }
   }
 
