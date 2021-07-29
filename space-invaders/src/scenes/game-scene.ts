@@ -45,7 +45,8 @@ export class GameScene extends Phaser.Scene {
             x: 20 + x * 15,
             y: 50 + y * 15,
             texture: type
-          })
+          },
+            this.player)
         );
       }
     }

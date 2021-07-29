@@ -1,6 +1,7 @@
 import { Bullet } from './bullet';
 import { ISpriteConstructor } from '../interfaces/sprite.interface';
 import { Bomb } from './bomb';
+import { Player } from './player';
 
 export class Enemy extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body;
@@ -16,12 +17,15 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   private reloadTime: number;
   private valueKill: number;
 
+  private player: Player;
+
   public getBullets(): Phaser.GameObjects.Group {
     return this.bullets;
   }
 
-  constructor(aParams: ISpriteConstructor) {
+  constructor(aParams: ISpriteConstructor, player: Player) {
     super(aParams.scene, aParams.x, aParams.y, aParams.texture);
+    this.player = player;
 
     this.initVariables(aParams.texture);
     this.initImage();
@@ -119,7 +123,8 @@ export class Enemy extends Phaser.GameObjects.Sprite {
               x: this.x,
               y: this.y,
               texture: 'bomb'
-            })
+            },
+              this.player)
           );
       }
 

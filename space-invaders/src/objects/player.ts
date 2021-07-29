@@ -43,6 +43,12 @@ export class Player extends Phaser.GameObjects.Image {
 
   private initImage(): void {
     this.setOrigin(0.5, 0.5);
+    this.scene.add.particles('flares').createEmitter({
+      frame: 'blue',
+      gravityY: 50,
+      scale: { start: 0.05, end: 0.005 },
+      lifespan: 500
+    }).startFollow(this, 0, 5);
   }
 
   private initInput(): void {
